@@ -1,51 +1,37 @@
 import axios from '@/utils/request'
-
+import qs from 'qs'
 /**
- * 获取验证码
- * @param sid 唯一标识
+ * 获取文章列表
+ * @param {Object} options 读取文章列表接口参数
  * @returns {*}
  */
-const getCode = (sid) => {
-  return axios.get('/public/getCaptcha', {
-    params: {
-      sid: sid
-    }
-  })
+const getList = (options) => {
+  return axios.get('/public/list?' + qs.stringify(options))
 }
 
 /**
- * 找回密码
- * @param option 用户信息(邮箱,验证码)
- * @returns {*}
+ * 获取温馨提醒
  */
-const forget = (option) => {
-  return axios.post('/auth/forget', {
-    ...option
-  })
+const getTips = () => {
+  return axios.get('/public/tips')
 }
 
 /**
- * 登陆接口
- * @param loginInfo 用户登录信息
+ * 获取本周热议
  */
-const login = (loginInfo) => {
-  return axios.post('/auth/login', {
-    ...loginInfo
-  })
+const getTop = () => {
+  return axios.get('/public/topWeek')
 }
 
 /**
- * 注册接口
- * @param regInfo 用户登录信息
+ * 获取友情链接
  */
-const reg = (regInfo) => {
-  return axios.post('/auth/reg', {
-    ...regInfo
-  })
+const getLinks = () => {
+  return axios.get('/public/links')
 }
 export {
-  getCode,
-  forget,
-  login,
-  reg
+  getList,
+  getTips,
+  getLinks,
+  getTop
 }
