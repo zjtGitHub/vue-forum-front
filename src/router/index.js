@@ -53,6 +53,7 @@ const routes = [
 ]
 
 const router = new Router({
+  linkExactActiveClass: 'layui-this',
   routes
 })
 
