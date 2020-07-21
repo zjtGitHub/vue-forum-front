@@ -144,15 +144,15 @@ export default {
     ListItem
   },
   mounted () {
-    this._getList(options)
+    this._getList()
   },
   methods: {
     nextPage () {
       this.page++
       this._getList()
     },
-    _getList (options) {
-      getList(options).then((res) => {
+    _getList () {
+      getList().then((res) => {
         if (res.code === 200) {
           if (this.list.length === 0) {
             this.list = res.data
