@@ -14,9 +14,9 @@
         </h2>
         <div class="fly-list-info">
           <a href="user/home.html" link>
-            <cite>{{ item.user.id }}</cite>
+            <cite>{{ item.uid.id }}</cite>
             <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-            <i class="layui-badge fly-badge-vip">{{ 'VIP' + item.user.isVip }}</i>
+            <i class="layui-badge fly-badge-vip">{{ 'VIP' + item.uid.isVip }}</i>
           </a>
           <span>{{ item.created }}</span>
 
@@ -34,9 +34,10 @@
       </li>
     </ul>
     <div style="text-align: center" v-show="isShow">
-      <div class="laypage-main">
-        <a href="jie/index.html" class="laypage-next" @click="more">更多求解</a>
+      <div class="laypage-main" v-if="!isEnd">
+        <a class="laypage-next" @click.prevent="more">更多求解</a>
       </div>
+      <div class="nomore gray" v-else>没有更多了</div>
     </div>
   </div>
 </template>
@@ -53,6 +54,10 @@ export default {
     isShow: {
       type: Boolean,
       default: true
+    },
+    isEnd: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -96,6 +101,12 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.nomore {
+  font-size: 16px;
+  padding: 30px 0;
+}
+.laypage-next {
+  cursor: pointer;
+}
 </style>

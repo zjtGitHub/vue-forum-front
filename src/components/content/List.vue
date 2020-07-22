@@ -14,7 +14,7 @@
           <a :class="{'layui-this': sort === 'answer'}" @click.prevent="search(4)">按热议</a>
         </span>
       </div>
-    <list-item :list="list" @nextPage="nextPage"></list-item>
+    <list-item :list="list" :isEnd="isEnd" @nextPage="nextPage"></list-item>
   </div>
 </template>
 
@@ -25,119 +25,15 @@ export default {
   name: 'list',
   data () {
     return {
+      isEnd: false,
+      isRepeat: false,
       status: 0,
       tags: '精华',
       sort: 'created',
       page: 0,
       limit: 20,
       catalog: '',
-      list: [
-        {
-          tid: '1',
-          title: '帖子的标题',
-          catalog: 'index',
-          fav: '888',
-          created: '2020-06-15 00:00:00',
-          isEnd: '0',
-          isTop: '0',
-          sort: '0',
-          answer: '666',
-          status: '1',
-          tags: [
-            {
-              name: '精品'
-            },
-            {
-              name: 'asdads'
-            }
-          ],
-          user: {
-            id: '用户id',
-            isVip: '2',
-            name: '用户昵称',
-            pic: '用户头像'
-          }
-        },
-        {
-          tid: '1',
-          title: '帖子的标题',
-          catalog: 'index',
-          fav: '888',
-          created: '2020-06-15 00:00:00',
-          isEnd: '0',
-          isTop: '0',
-          sort: '0',
-          answer: '666',
-          status: '1',
-          tags: [
-            {
-              name: '精品'
-            },
-            {
-              name: 'asdads'
-            }
-          ],
-          user: {
-            id: '用户id',
-            isVip: '2',
-            name: '用户昵称',
-            pic: '用户头像'
-          }
-        },
-        {
-          tid: '1',
-          title: '帖子的标题',
-          catalog: 'index',
-          fav: '888',
-          created: '2020-06-15 00:00:00',
-          isEnd: '0',
-          isTop: '0',
-          sort: '0',
-          answer: '666',
-          status: '1',
-          tags: [
-            {
-              name: '精品'
-            },
-            {
-              name: 'asdads'
-            }
-          ],
-          user: {
-            id: '用户id',
-            isVip: '2',
-            name: '用户昵称',
-            pic: '用户头像'
-          }
-        },
-        {
-          tid: '1',
-          title: '帖子的标题',
-          catalog: 'index',
-          fav: '888',
-          created: '2020-06-15 00:00:00',
-          isEnd: '0',
-          isTop: '0',
-          sort: '0',
-          answer: '666',
-          status: '1',
-          tags: [
-            {
-              name: '精品'
-            },
-            {
-              name: 'asdads'
-            }
-          ],
-          user: {
-            id: '用户id',
-            isVip: '2',
-            name: '用户昵称',
-            pic: '用户头像'
-          }
-        }
-
-      ]
+      list: []
     }
   },
   components: {
@@ -148,16 +44,36 @@ export default {
   },
   methods: {
     nextPage () {
-      this.page++
+      // this.page++
       this._getList()
     },
     _getList () {
-      getList().then((res) => {
+      // 请求锁，每次请求时变为true，请求成功后变为false，只有为false时才发起请求
+      // if (this.isRepeat) return
+      if (this.isEnd) return
+      this.isRepeat = true
+      const options = {
+        catalog: this.catalog,
+        isTop: 0,
+        status: this.status,
+        tags: this.tags,
+        sort: this.sort,
+        page: this.page,
+        limit: this.limit
+      }
+      getList(options).then((res) => {
         if (res.code === 200) {
+          this.isRepeat = false
+          // 如果小于20条则不向后台发送请求
+          if (res.data.length < this.limit) {
+            this.isEnd = true
+          }
           if (this.list.length === 0) {
+            console.log(res)
             this.list = res.data
           } else {
-            this.list = res.data.concat(res.data)
+            this.list = this.list.concat(res.data)
+            console.log(this.list.length)
           }
         }
       }).catch((err) => {
