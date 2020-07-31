@@ -33,18 +33,27 @@ export default {
       page: 0,
       limit: 20,
       catalog: '',
-      list: []
+      list: [],
+      current: ''
     }
   },
   components: {
     ListItem
+  },
+  watch: {
+    current (n, o) {
+      this.page = 0
+      this.list = []
+      this.isEnd = false
+      this._getList()
+    }
   },
   mounted () {
     this._getList()
   },
   methods: {
     nextPage () {
-      // this.page++
+      this.page++
       this._getList()
     },
     _getList () {
@@ -73,7 +82,6 @@ export default {
             this.list = res.data
           } else {
             this.list = this.list.concat(res.data)
-            console.log(this.list.length)
           }
         }
       }).catch((err) => {
@@ -83,6 +91,11 @@ export default {
       })
     },
     search (val) {
+      if (typeof val === 'undefined' && this.current === '') {
+        return
+      }
+      this.current = val
+      console.log(val)
       switch (val) {
         case 0:
           this.status = '0'
@@ -105,6 +118,7 @@ export default {
         default:
           this.status = ''
           this.tags = ''
+          this.current = ''
           break
       }
     }
