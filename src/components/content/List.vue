@@ -1,13 +1,13 @@
 <template>
   <div class="fly-panel" style="margin-bottom: 0;">
     <div class="fly-panel-title fly-filter">
-        <a :class="{'layui-this': status === '' && tags === ''}" @click.prevent="search()">综合</a>
+        <a :class="{'layui-this': status === '' && tag === ''}" @click.prevent="search()">综合</a>
         <span class="fly-mid"></span>
         <a :class="{'layui-this': status === '0'}" @click.prevent="search(0)">未结</a>
         <span class="fly-mid"></span>
         <a :class="{'layui-this': status === '1'}" @click.prevent="search(1)">已结</a>
         <span class="fly-mid"></span>
-        <a :class="{'layui-this': status === '' && tags === '精华'}" @click.prevent="search(2)">精华</a>
+        <a :class="{'layui-this': status === '' && tag === '精华'}" @click.prevent="search(2)">精华</a>
         <span class="fly-filter-right layui-hide-xs">
           <a :class="{'layui-this': sort === 'created'}" @click.prevent="search(3)">按最新</a>
           <span class="fly-mid"></span>
@@ -27,8 +27,8 @@ export default {
     return {
       isEnd: false,
       isRepeat: false,
-      status: 0,
-      tags: '精华',
+      status: '',
+      tag: '',
       sort: 'created',
       page: 0,
       limit: 20,
@@ -42,16 +42,29 @@ export default {
   },
   watch: {
     current (n, o) {
-      this.page = 0
-      this.list = []
-      this.isEnd = false
-      this._getList()
+      this.init()
+    },
+    '$route' (n, o) {
+      const catalog = this.$route.params.catalog
+      if (typeof catalog !== 'undefined' && catalog !== '') {
+        this.catalog = catalog
+      }
+      this.status = ''
+      this.tag = ''
+      this.init()
     }
   },
   mounted () {
     this._getList()
   },
   methods: {
+    // 查询初始化
+    init () {
+      this.page = 0
+      this.list = []
+      this.isEnd = false
+      this._getList()
+    },
     nextPage () {
       this.page++
       this._getList()
@@ -65,7 +78,7 @@ export default {
         catalog: this.catalog,
         isTop: 0,
         status: this.status,
-        tags: this.tags,
+        tag: this.tag,
         sort: this.sort,
         page: this.page,
         limit: this.limit
@@ -86,7 +99,8 @@ export default {
         }
       }).catch((err) => {
         if (err) {
-          this.$alert(err.msg)
+          console.log(err.response)
+          this.$alert(err.response.data.msg)
         }
       })
     },
@@ -99,15 +113,15 @@ export default {
       switch (val) {
         case 0:
           this.status = '0'
-          this.tags = ''
+          this.tag = ''
           break
         case 1:
           this.status = '1'
-          this.tags = ''
+          this.tag = ''
           break
         case 2:
           this.status = ''
-          this.tags = '精华'
+          this.tag = '精华'
           break
         case 3:
           this.sort = 'created'
@@ -117,7 +131,7 @@ export default {
           break
         default:
           this.status = ''
-          this.tags = ''
+          this.tag = ''
           this.current = ''
           break
       }
