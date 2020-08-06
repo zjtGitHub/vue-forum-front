@@ -27,12 +27,12 @@
         >
           <div class="layui-tab-item layui-show">
             <div class="layui-form layui-form-pane">
-              <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
+              <ValidationObserver ref="observer" v-slot="{ handleSubmit, validate }">
                 <form @submit.prevent="handleSubmit(onSubmit)">
                   <ValidationProvider
                     rules="required|email"
                     v-slot="{ errors }"
-                    name="用户名"
+                    name="username"
                   >
                     <div class="layui-form-item">
                       <label
@@ -59,7 +59,7 @@
                   <ValidationProvider
                     rules="required|min:5"
                     v-slot="{ errors }"
-                    name="昵称"
+                    name="name"
                   >
                     <div class="layui-form-item">
                       <label
@@ -71,7 +71,7 @@
                           v-model="nickname"
                           type="text"
                           id="L_username"
-                          name="nickname"
+                          name="name"
                           class="layui-input"
                         >
                       </div>
@@ -83,7 +83,7 @@
                   <ValidationProvider
                     rules="required|min:6|max:16"
                     v-slot="{ errors }"
-                    name="密码"
+                    name="password"
                     vid="password"
                   >
                     <div class="layui-form-item">
@@ -96,7 +96,7 @@
                           v-model="password"
                           type="password"
                           id="L_pass"
-                          name="pass"
+                          name="password"
                           class="layui-input"
                         >
                       </div>
@@ -136,7 +136,7 @@
                     rules="required|length:4"
                     ref="codefiled"
                     v-slot="{ errors }"
-                    name="验证码"
+                    name="code"
                   >
                     <div class="layui-form-item">
                       <label
@@ -172,7 +172,8 @@
                   <div class="layui-form-item">
                     <button
                       class="layui-btn"
-                      type="submit"
+                      type="button"
+                      @click="validate().then(onSubmit)"
                     >
                       立即注册
                     </button>
@@ -256,6 +257,7 @@ export default {
           this.repassword = ''
           this.name = ''
           this.code = ''
+          this.$alert(res.msg)
           requestAnimationFrame(() => {
             this.$refs.observer.reset()
           })
@@ -263,7 +265,7 @@ export default {
             this.$router.push('/login')
           }, 1000)
         } else {
-          this.$refs.codefiled.setErrors([res.msg])
+          this.$refs.observer.setErrors(res.msg)
         }
       })
     }
@@ -274,7 +276,7 @@ export default {
 <style lang="scss" scoped>
   .svg {
     position: relative;
-    top: -5px;
+    top: -10px;
   }
   .error {
     color: red;

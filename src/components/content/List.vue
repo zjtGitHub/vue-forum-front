@@ -75,12 +75,12 @@ export default {
       if (this.isEnd) return
       this.isRepeat = true
       const options = {
-        catalog: this.catalog,
         isTop: 0,
+        page: this.page,
+        catalog: this.catalog,
         status: this.status,
         tag: this.tag,
         sort: this.sort,
-        page: this.page,
         limit: this.limit
       }
       getList(options).then((res) => {
@@ -104,6 +104,9 @@ export default {
         }
       })
     },
+    /**
+     * 文章状态查询
+     */
     search (val) {
       if (typeof val === 'undefined' && this.current === '') {
         return
@@ -111,11 +114,11 @@ export default {
       this.current = val
       console.log(val)
       switch (val) {
-        case 0:
+        case 0: // 未结
           this.status = '0'
           this.tag = ''
           break
-        case 1:
+        case 1: // 已结
           this.status = '1'
           this.tag = ''
           break
@@ -123,10 +126,10 @@ export default {
           this.status = ''
           this.tag = '精华'
           break
-        case 3:
+        case 3: // 按创建时间排序
           this.sort = 'created'
           break
-        case 4:
+        case 4: // 按热议排序
           this.sort = 'answer'
           break
         default:

@@ -202,12 +202,14 @@ export default {
           this.username = ''
           this.password = ''
           this.code = ''
-          requestAnimationFrame(() => {
-            this.$refs.observer.reset()
-          })
-          console.log(res)
+          this.$refs.observer.reset()
+          localStorage.setItem('isLogin', true)
+          this.$store.commit('setLogin', true)
+          this.$router.push('/')
         } else if (res.code === 401) {
           this.$refs.codefield.setErrors([res.msg])
+        } else {
+          this.$alert(res.msg)
         }
       }).catch((err) => {
         const data = err.response.data
@@ -218,7 +220,13 @@ export default {
         }
         console.log(err.response)
       })
+    },
+    handleLogin () {
+      localStorage.setItem('isLogin', true)
+      this.$store.commit('setLogin', true)
+      this.$router.push('/')
     }
+
   }
 }
 </script>
