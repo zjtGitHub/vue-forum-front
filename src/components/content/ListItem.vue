@@ -18,7 +18,7 @@
             <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
             <i class="layui-badge fly-badge-vip">{{ 'VIP' + item.uid.isVip }}</i>
           </a>
-          <span>{{ item.created }}</span>
+          <span>{{ item.created | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻">
               <i class="iconfont icon-kiss"></i>{{ item.fav }}
@@ -44,6 +44,10 @@
 
 <script>
 import moment from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import relativeTime from 'dayjs/plugin/relativeTime'
+moment.locale('zh-cn')
+moment.extend(relativeTime)
 export default {
   name: 'ListItem',
   props: {
@@ -91,10 +95,10 @@ export default {
   },
   filters: {
     moment (date) {
-      if (moment(date).isBefore(moment().subtract()(7, 'days'))) {
-        return moment(date).format('YYYY-MM-DD')
+      if (!moment(date).isBefore(moment().subtract(7, 'day'))) {
+        return moment(date).fromNow()
       } else {
-        return moment(date).from(date)
+        return moment(date).format('YYYY-MM-DD')
       }
     }
   }

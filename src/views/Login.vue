@@ -203,9 +203,7 @@ export default {
           this.password = ''
           this.code = ''
           this.$refs.observer.reset()
-          localStorage.setItem('isLogin', true)
-          this.$store.commit('setLogin', true)
-          this.$router.push('/')
+          this.handleLogin(res.data)
         } else if (res.code === 401) {
           this.$refs.codefield.setErrors([res.msg])
         } else {
@@ -221,9 +219,10 @@ export default {
         console.log(err.response)
       })
     },
-    handleLogin () {
+    handleLogin (data) {
       localStorage.setItem('isLogin', true)
       this.$store.commit('setLogin', true)
+      this.$store.commit('setUserInfo', data)
       this.$router.push('/')
     }
 
