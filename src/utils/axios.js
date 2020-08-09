@@ -11,7 +11,7 @@ class HttpRequest {
 
   // 获取axios配置
   getInsideConfig () {
-    console.log(this.baseUrl)
+    // console.log(this.baseUrl)
     const config = {
       baseUrl: this.baseUrl,
       headers: {
@@ -39,7 +39,7 @@ class HttpRequest {
       config.CancelToken = new CancelToken((c) => {
         this.pending[key] = c
       })
-      console.log(this.pending)
+      // console.log(this.pending)
       return config
     }, (err) => {
       errorHandle(err)
@@ -62,7 +62,7 @@ class HttpRequest {
     const instance = axios.create()
     const newOptions = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance)
-    console.log(newOptions)
+    // console.log(newOptions)
     return instance(newOptions)
   }
 

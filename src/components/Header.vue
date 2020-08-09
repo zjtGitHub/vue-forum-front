@@ -2,7 +2,7 @@
   <div class="fly-header layui-bg-black">
     <div class="layui-container">
       <a class="fly-logo" href="/">
-        <img src="@/assets/images/logo-1.png" alt="layui" />
+        <img src="@/assets/logo.png" alt="layui" />
       </a>
       <ul class="layui-nav fly-nav layui-hide-xs">
         <!-- <li class="layui-nav-item layui-this">
@@ -48,13 +48,19 @@
 
         <template v-else>
           <!-- 登入后的状态 -->
-          <li class="layui-nav-item" v-if="isLogin">
-            <a class="fly-nav-avatar" href="javascript:;">
+          <li class="layui-nav-item" v-if="isLogin" @mouseover="show()" @mouseleave="hide()">
+            <a class="fly-nav-avatar" href="javascript:;" >
               <cite class="layui-hide-xs">{{ userInfo.nickname }}</cite>
-              <i class="layui-badge fly-badge-vip layui-hide-xs" v-show="userInfo.isVip">{{ 'VIP' + userInfo.isVip }}</i>
+              <i
+                class="layui-badge fly-badge-vip layui-hide-xs"
+                v-show="userInfo.isVip !== '0'"
+              >{{ 'VIP' + userInfo.isVip }}</i>
               <img :src="userInfo.pic" />
             </a>
-            <dl class="layui-nav-child">
+            <dl
+              class="layui-nav-child layui-anim layui-anim-scaleSpring"
+              :class="{'layui-show': isHover}"
+            >
               <dd>
                 <a href>
                   <i class="layui-icon">&#xe620;</i>基本设置
@@ -87,8 +93,32 @@ export default {
   name: 'Header',
   data () {
     return {
-      userInfo: this.$store.state.userInfo,
-      isLogin: this.$store.state.isLogin
+      isHover: false,
+      hoverCtrl: {}
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
+    },
+    isLogin () {
+      return this.$store.state.isLogin
+    }
+  },
+  methods: {
+    show () {
+      console.log('show')
+      clearTimeout(this.hoverCtrl)
+      this.hoverCtrl = setTimeout(() => {
+        this.isHover = true
+      }, 200)
+    },
+    hide () {
+      console.log('hide')
+      clearTimeout(this.hoverCtrl)
+      this.hoverCtrl = setTimeout(() => {
+        this.isHover = false
+      }, 300)
     }
   }
 }

@@ -199,11 +199,12 @@ export default {
         sid: this.$store.state.sid
       }).then((res) => {
         if (res.code === 200) {
+          this.handleLogin(res.data)
           this.username = ''
           this.password = ''
           this.code = ''
           this.$refs.observer.reset()
-          this.handleLogin(res.data)
+          this.$router.push({ name: 'index' })
         } else if (res.code === 401) {
           this.$refs.codefield.setErrors([res.msg])
         } else {
@@ -220,10 +221,9 @@ export default {
       })
     },
     handleLogin (data) {
-      localStorage.setItem('isLogin', true)
+      // localStorage.setItem('isLogin', true)
       this.$store.commit('setLogin', true)
       this.$store.commit('setUserInfo', data)
-      this.$router.push('/')
     }
 
   }

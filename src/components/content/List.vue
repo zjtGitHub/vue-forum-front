@@ -45,6 +45,8 @@ export default {
       this.init()
     },
     '$route' (n, o) {
+      console.log(o, 'old')
+      console.log(n, 666)
       const catalog = this.$route.params.catalog
       if (typeof catalog !== 'undefined' && catalog !== '') {
         this.catalog = catalog
@@ -91,7 +93,6 @@ export default {
             this.isEnd = true
           }
           if (this.list.length === 0) {
-            console.log(res)
             this.list = res.data
           } else {
             this.list = this.list.concat(res.data)
