@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/views/Home.vue'
+import store from '@/store'
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ '../views/Reg.vue')
@@ -119,7 +120,15 @@ const routes = [
         name: 'others',
         component: Others
       }
-    ]
+    ],
+    beforeEnter: (to, from, next) => {
+      console.log(store)
+      if (store.state.isLogin) {
+        next()
+      } else {
+        next('login')
+      }
+    }
   }
 ]
 

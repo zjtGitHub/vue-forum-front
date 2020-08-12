@@ -50,7 +50,7 @@
           <!-- 登入后的状态 -->
           <li class="layui-nav-item" v-if="isLogin" @mouseover="show()" @mouseleave="hide()">
             <a class="fly-nav-avatar" href="javascript:;" >
-              <cite class="layui-hide-xs">{{ userInfo.nickname }}</cite>
+              <cite class="layui-hide-xs">{{ userInfo.name }}</cite>
               <i
                 class="layui-badge fly-badge-vip layui-hide-xs"
                 v-show="userInfo.isVip !== '0'"
@@ -62,19 +62,19 @@
               :class="{'layui-show': isHover}"
             >
               <dd>
-                <a href>
+                <router-link :to="{ name: 'center' }">
                   <i class="layui-icon">&#xe620;</i>基本设置
-                </a>
+                </router-link>
               </dd>
               <dd>
-                <a href>
+                <router-link :to="{ name: 'center' }">
                   <i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息
-                </a>
+                </router-link>
               </dd>
               <dd>
-                <a href>
+                <router-link :to="{ name: 'center' }">
                   <i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页
-                </a>
+                </router-link>
               </dd>
               <hr style="margin: 5px 0;" />
               <dd>
