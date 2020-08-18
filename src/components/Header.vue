@@ -78,7 +78,7 @@
               </dd>
               <hr style="margin: 5px 0;" />
               <dd>
-                <a href style="text-align: center;">退出</a>
+                <a href="javascript:;" @click="logout" style="text-align: center;">退出</a>
               </dd>
             </dl>
           </li>
@@ -119,6 +119,15 @@ export default {
       this.hoverCtrl = setTimeout(() => {
         this.isHover = false
       }, 300)
+    },
+    logout () {
+      this.$confirm('确定退出?', () => {
+        localStorage.clear()
+        this.$store.commit('setToken', '')
+        this.$store.commit('setLogin', false)
+        this.$store.commit('setUserInfo', '')
+        this.$router.push('/')
+      }, () => {})
     }
   }
 }

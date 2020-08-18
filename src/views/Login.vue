@@ -199,7 +199,9 @@ export default {
         sid: this.$store.state.sid
       }).then((res) => {
         if (res.code === 200) {
-          this.handleLogin(res.data)
+          this.$store.commit('setLogin', true)
+          this.$store.commit('setUserInfo', res.data)
+          this.$store.commit('setToken', res.token)
           this.username = ''
           this.password = ''
           this.code = ''
@@ -219,11 +221,6 @@ export default {
         }
         console.log(err.response)
       })
-    },
-    handleLogin (data) {
-      // localStorage.setItem('isLogin', true)
-      this.$store.commit('setLogin', true)
-      this.$store.commit('setUserInfo', data)
     }
 
   }

@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "dayjs": "^1.8.29",
+    "jsonwebtoken": "^8.5.1",
     "qs": "^6.9.4",
     "uuid": "^8.2.0",
     "vee-validate": "^3.3.2",

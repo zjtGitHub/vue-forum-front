@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/views/Home.vue'
 import store from '@/store'
+import jwt from 'jsonwebtoken'
+import moment from 'dayjs'
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ '../views/Reg.vue')
@@ -71,6 +73,7 @@ const routes = [
     path: '/center',
     component: Center,
     linkActiveClass: 'layui-this',
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -120,21 +123,41 @@ const routes = [
         name: 'others',
         component: Others
       }
-    ],
-    beforeEnter: (to, from, next) => {
-      console.log(store)
-      if (store.state.isLogin) {
-        next()
-      } else {
-        next('login')
-      }
-    }
+    ]
   }
 ]
 
 const router = new Router({
   linkExactActiveClass: 'layui-this',
   routes
+})
+
+// 每次路由跳转前,判断token是否过期
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  if (token !== '' && token !== null) {
+    const payload = jwt.decode(token)
+    console.log(moment().isBefore(moment(payload.exp * 1000)))
+    if (moment().isBefore(moment(payload.exp * 1000))) {
+      // 如果缓存中存在token并且没过期 直接登录
+      store.commit('setToken', token)
+      store.commit('setUserInfo', userInfo)
+      store.commit('setLogin', true)
+    } else {
+      localStorage.clear()
+    }
+  }
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const isLogin = store.state.isLogin
+    if (isLogin) {
+      next()
+    } else {
+      next('/login')
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     sid: '',
-    isLogin: localStorage.getItem('isLogin'),
+    isLogin: false,
     token: '',
     userInfo: {}
   },
@@ -16,9 +16,16 @@ export default new Vuex.Store({
     },
     setLogin (state, val) {
       state.isLogin = val
+      localStorage.setItem('isLogin', val)
+    },
+    setToken (state, val) {
+      state.token = val
+      localStorage.setItem('token', val)
     },
     setUserInfo (state, val) {
+      if (val === '') return
       state.userInfo = val
+      localStorage.setItem('userInfo', JSON.stringify(val))
     }
   },
   actions: {},
