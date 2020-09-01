@@ -82,7 +82,6 @@ const routes = [
       },
       {
         path: 'setting',
-        name: 'setting',
         component: Setting,
         linkActiveClass: 'layui-this',
         children: [
@@ -145,6 +144,9 @@ router.beforeEach((to, from, next) => {
       store.commit('setUserInfo', userInfo)
       store.commit('setLogin', true)
     } else {
+      store.commit('setToken', '')
+      store.commit('setUserInfo', {})
+      store.commit('setLogin', false)
       localStorage.clear()
     }
   }

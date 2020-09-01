@@ -35,4 +35,10 @@ export default {
   .gray {
     color: #999;
   }
+  .orange {
+    color: #ff5722;
+  }
+  .pull-right {
+    float: right!important;
+  }
 </style>
