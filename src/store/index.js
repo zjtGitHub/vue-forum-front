@@ -26,6 +26,11 @@ export default new Vuex.Store({
       if (val === '') return
       state.userInfo = val
       localStorage.setItem('userInfo', JSON.stringify(val))
+    },
+    setCount (state, val) {
+      if (val === '') return
+      state.userInfo.count = val
+      localStorage.setItem('userInfo', JSON.stringify(val))
     }
   },
   actions: {},
