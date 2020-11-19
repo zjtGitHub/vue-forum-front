@@ -127,7 +127,8 @@ export default {
         this.$store.commit('setLogin', false)
         this.$store.commit('setUserInfo', '')
         this.$router.push('/')
-      }, () => {})
+        location.reload()
+      })
     }
   }
 }

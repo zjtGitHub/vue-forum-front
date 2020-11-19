@@ -49,7 +49,8 @@ export default {
       isShow: false,
       showList: false,
       current: 0,
-      isSign: false
+      isLogin: this.$store.state.isLogin,
+      fav: 0
     }
   },
   computed: {
@@ -77,6 +78,9 @@ export default {
       } else {
         return 0
       }
+    },
+    isSign () {
+      return this.$store.state.userInfo.isSign
     }
   },
   methods: {
@@ -91,11 +95,24 @@ export default {
       this.showList = false
     },
     signIn () {
-      signIn().then((res) => {
-        console.log(res)
-      }).catch((err) => {
-        console.log(err)
-      })
+      if (this.isLogin) {
+        signIn().then((res) => {
+          if (res.code === 200) {
+            const userInfo = this.$store.state.userInfo
+            this.$alert('签到成功！')
+            userInfo.count = res.count
+            userInfo.favs = res.favs
+            userInfo.isSign = true
+            this.$store.commit('setUserInfo', userInfo)
+          } else {
+            this.$alert('今日已签到！')
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+      } else {
+        this.$alert('请先登录！')
+      }
     }
 
   }

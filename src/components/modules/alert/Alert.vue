@@ -43,7 +43,7 @@ export default {
       this.isShow = false
     },
     closeMask () {
-
+      this.isShow = false
     },
     cancelEvent () {
       this.cancel()

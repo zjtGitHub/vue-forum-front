@@ -3,7 +3,6 @@ import AlertComponent from './Alert.vue'
 const Alert = {}
 
 Alert.install = (Vue) => {
-  console.log(Vue)
   const AlertConstructor = Vue.extend(AlertComponent)
   const instance = new AlertConstructor()
 
@@ -24,7 +23,7 @@ Alert.install = (Vue) => {
       instance.success = success
     }
     if (typeof cancel !== 'undefined') {
-      instance.cancel = success
+      instance.cancel = cancel
     }
   }
 }
