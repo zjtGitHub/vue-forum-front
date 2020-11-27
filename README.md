@@ -20,5 +20,4 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+计划添加功能：长时间不操作退出登录。
