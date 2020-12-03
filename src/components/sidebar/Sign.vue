@@ -100,6 +100,13 @@ export default {
       }
     }
   },
+  watch: {
+    isSign (n, o) {
+      if (n) {
+        this.signCountdown()
+      }
+    }
+  },
   methods: {
     showInfo () {
       this.isShow = true

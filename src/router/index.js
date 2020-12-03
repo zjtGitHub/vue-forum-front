@@ -21,7 +21,7 @@ const MyInfo = () => import(/* webpackChunkName: 'MyInfo' */ '../components/user
 const Password = () => import(/* webpackChunkName: 'PassWord' */ '../components/user/common/Password.vue')
 const PicUpload = () => import(/* webpackChunkName: 'PicUpload' */ '../components/user/common/PicUpload.vue')
 const BindAccount = () => import(/* webpackChunkName: 'BindAccount' */ '../components/user/common/BindAccount.vue')
-
+const NotFound = () => import(/* webpackChunkName: 'NotFound' */ '../views/404.vue')
 Vue.use(Router)
 
 const routes = [
@@ -123,6 +123,14 @@ const routes = [
         component: Others
       }
     ]
+  },
+  {
+    path: '/404',
+    component: NotFound
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ]
 
