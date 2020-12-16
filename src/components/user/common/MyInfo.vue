@@ -154,7 +154,7 @@ export default {
     onSubmit () {
       const form = this.form
       updateUserInfo(form).then(res => {
-        if (res.code === 200) { this.$alert('更新成功！') }
+        if (res.code === 200) { this.$alert(res.msg) }
       })
     }
   }

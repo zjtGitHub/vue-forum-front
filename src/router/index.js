@@ -22,6 +22,8 @@ const Password = () => import(/* webpackChunkName: 'PassWord' */ '../components/
 const PicUpload = () => import(/* webpackChunkName: 'PicUpload' */ '../components/user/common/PicUpload.vue')
 const BindAccount = () => import(/* webpackChunkName: 'BindAccount' */ '../components/user/common/BindAccount.vue')
 const NotFound = () => import(/* webpackChunkName: 'NotFound' */ '../views/404.vue')
+const Confirm = () => import(/* webpackChunkName: 'Confirm' */ '../views/Confirm.vue')
+const Reset = () => import(/* webpackChunkName: 'Reset' */ '../views/Reset.vue')
 Vue.use(Router)
 
 const routes = [
@@ -45,6 +47,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/confirm',
+    name: 'logiconfirmn',
+    component: Confirm
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: Reset
   },
   {
     path: '/reg',

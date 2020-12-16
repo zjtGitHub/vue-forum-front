@@ -1,4 +1,5 @@
 import axios from '@/utils/request'
+import qs from 'qs'
 /**
  * 用户签到接口
  * @param {Object} options
@@ -17,7 +18,11 @@ const updateUserInfo = (data) => {
   return axios.post('/user/basic', data)
 }
 
+// 确认修改邮箱
+const updateUsername = (data) => axios.get('/public/reset-email?' + qs.stringify(data))
+
 export {
   signIn,
-  updateUserInfo
+  updateUserInfo,
+  updateUsername
 }
