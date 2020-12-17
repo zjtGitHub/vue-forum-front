@@ -27,7 +27,7 @@
         >
           <div class="layui-tab-item layui-show">
             <div class="layui-form layui-form-pane">
-              <ValidationObserver ref="observer" v-slot="{ handleSubmit, validate }">
+              <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(onSubmit)">
                   <ValidationProvider
                     rules="required|email"
@@ -59,7 +59,7 @@
                   <ValidationProvider
                     rules="required|min:5"
                     v-slot="{ errors }"
-                    name="name"
+                    name="nickname"
                   >
                     <div class="layui-form-item">
                       <label
@@ -71,7 +71,6 @@
                           v-model="nickname"
                           type="text"
                           id="L_username"
-                          name="name"
                           class="layui-input"
                         >
                       </div>
@@ -96,7 +95,6 @@
                           v-model="password"
                           type="password"
                           id="L_pass"
-                          name="password"
                           class="layui-input"
                         >
                       </div>
@@ -109,9 +107,9 @@
                     </div>
                   </ValidationProvider>
                   <ValidationProvider
-                    rules="confirmed:password"
+                    rules="required|confirmed:password"
                     v-slot="{ errors }"
-                    name="密码"
+                    name="repassword"
                   >
                     <div class="layui-form-item">
                       <label
@@ -123,7 +121,6 @@
                           v-model="repass"
                           type="password"
                           id="L_repass"
-                          name="repass"
                           class="layui-input"
                         >
                       </div>
@@ -172,8 +169,7 @@
                   <div class="layui-form-item">
                     <button
                       class="layui-btn"
-                      type="button"
-                      @click="validate().then(onSubmit)"
+                      type="submit"
                     >
                       立即注册
                     </button>

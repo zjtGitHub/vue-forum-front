@@ -21,8 +21,16 @@ const updateUserInfo = (data) => {
 // 确认修改邮箱
 const updateUsername = (data) => axios.get('/public/reset-email?' + qs.stringify(data))
 
+// 获取用户信息
+const getUserInfo = () => axios.get('/user/getUserInfo')
+
+// 修改密码
+const updatePassword = (data) => axios.post('/user/updatePassword', data)
+
 export {
   signIn,
   updateUserInfo,
-  updateUsername
+  updateUsername,
+  getUserInfo,
+  updatePassword
 }

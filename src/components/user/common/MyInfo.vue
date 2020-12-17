@@ -124,7 +124,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from '@/utils/utils'
-import { updateUserInfo } from '@/api/User'
+import { updateUserInfo, getUserInfo } from '@/api/User'
 export default {
   name: 'myinfo',
   data () {
@@ -143,18 +143,34 @@ export default {
     ValidationObserver
   },
   mounted () {
-    const { username, name, gender, location, regmark } = this.$store.state.userInfo
-    this.form.username = username || ''
-    this.form.name = name || ''
-    this.form.gender = gender || ''
-    this.form.location = location || ''
-    this.form.regmark = regmark || ''
+    getUserInfo().then(res => {
+      if (res.code === 200) {
+        const { username, name, gender, location, regmark } = res.data
+        this.form.username = username || ''
+        this.form.name = name || ''
+        this.form.gender = gender || ''
+        this.form.location = location || ''
+        this.form.regmark = regmark || ''
+      }
+    })
+    // const { username, name, gender, location, regmark } = this.$store.state.userInfo
+    // this.form.username = username || ''
+    // this.form.name = name || ''
+    // this.form.gender = gender || ''
+    // this.form.location = location || ''
+    // this.form.regmark = regmark || ''
   },
   methods: {
     onSubmit () {
       const form = this.form
       updateUserInfo(form).then(res => {
-        if (res.code === 200) { this.$alert(res.msg) }
+        if (res.code === 200) {
+          this.$store.commit('setUserInfo', {
+            ...this.$store.state.userInfo,
+            ...this.form
+          })
+          this.$alert(res.msg)
+        }
       })
     }
   }

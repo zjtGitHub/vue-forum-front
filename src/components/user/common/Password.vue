@@ -1,61 +1,111 @@
 <template>
   <div class="layui-form layui-form-pane layui-tab-item layui-show">
-    <form action="/user/repass" method="post">
-      <div class="layui-form-item">
-        <label for="L_nowpass" class="layui-form-label">当前密码</label>
-        <div class="layui-input-inline">
-          <input
-            type="password"
-            id="L_nowpass"
-            name="nowpass"
-            required
-            lay-verify="required"
-            autocomplete="off"
-            class="layui-input"
-          />
+    <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
+      <form @submit.prevent="handleSubmit(onSubmit)">
+        <div class="layui-form-item">
+          <ValidationProvider
+            rules="required"
+            v-slot="{ errors }"
+            name="password"
+          >
+            <div class="layui-row">
+              <label for="L_nowpass" class="layui-form-label">当前密码</label>
+              <div class="layui-input-inline">
+                <input
+                  v-model="oldpassword"
+                  type="password"
+                  id="L_nowpass"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+
+            <div class="error layui-row">
+              {{ errors[0] }}
+            </div>
+          </ValidationProvider>
         </div>
-      </div>
-      <div class="layui-form-item">
-        <label for="L_pass" class="layui-form-label">新密码</label>
-        <div class="layui-input-inline">
-          <input
-            type="password"
-            id="L_pass"
-            name="pass"
-            required
-            lay-verify="required"
-            autocomplete="off"
-            class="layui-input"
-          />
+        <ValidationProvider
+          rules="required|min:6|max:16"
+          v-slot="{ errors }"
+          name="newpassword"
+          vid="password"
+        >
+          <div class="layui-row">
+            <div class="layui-form-item">
+              <label for="L_pass" class="layui-form-label">新密码</label>
+              <div class="layui-input-inline">
+                <input
+                  v-model="newpassword"
+                  type="password"
+                  id="L_pass"
+                  class="layui-input"
+                />
+              </div>
+              <div class="layui-form-mid layui-word-aux">6到16个字符</div>
+            </div>
+          </div>
+
+          <div class="error layui-row">
+            {{ errors[0] }}
+          </div>
+        </ValidationProvider>
+        <ValidationProvider
+          rules="confirmed:newpassword"
+          v-slot="{ errors }"
+          name="repassword"
+        >
+          <div class="layui-row">
+            <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">确认密码</label>
+              <div class="layui-input-inline">
+                <input
+                  v-model="repassword"
+                  type="password"
+                  id="L_repass"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="error layui-row">
+            {{ errors[0] }}
+          </div>
+        </ValidationProvider>
+        <div class="layui-form-item">
+          <button
+            class="layui-btn"
+            type="submit"
+          >
+            确认修改
+          </button>
         </div>
-        <div class="layui-form-mid layui-word-aux">6到16个字符</div>
-      </div>
-      <div class="layui-form-item">
-        <label for="L_repass" class="layui-form-label">确认密码</label>
-        <div class="layui-input-inline">
-          <input
-            type="password"
-            id="L_repass"
-            name="repass"
-            required
-            lay-verify="required"
-            autocomplete="off"
-            class="layui-input"
-          />
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
-      </div>
-    </form>
+      </form>
+    </ValidationObserver>
   </div>
 </template>
 
 <script>
+import { ValidationProvider, ValidationObserver } from '@/utils/utils'
 export default {
-  name: 'password'
+  name: 'password',
+  data () {
+    return {
+      oldpassword: '',
+      repassword: '',
+      password: ''
+    }
+  },
+  components: {
+    ValidationProvider,
+    ValidationObserver
+  }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.error {
+  color: red;
+}
 </style>

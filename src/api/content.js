@@ -29,9 +29,14 @@ const getTop = () => {
 const getLinks = () => {
   return axios.get('/public/links')
 }
+
+// 上传图片
+const uploadImg = (formData) => axios.post('/content/uploadImg', formData)
+
 export {
   getList,
   getTips,
   getLinks,
-  getTop
+  getTop,
+  uploadImg
 }
