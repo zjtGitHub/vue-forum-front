@@ -19,7 +19,7 @@ localize('zh_CN', {
     nickname: '昵称',
     repassword: '确认密码',
     newpassword: '新密码',
-    oldpassword: '老密码'
+    oldpassword: '旧密码'
   },
   fields: { // 对单独表单的规则，自定义提示
     username: {
