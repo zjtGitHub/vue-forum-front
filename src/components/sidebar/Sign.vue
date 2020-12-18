@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     score () {
-      const count = this.count + 1
+      const count = this.isSign ? this.count : this.count + 1
       let result = 0
       if (count < 5) {
         result = 5
