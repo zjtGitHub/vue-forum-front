@@ -107,15 +107,13 @@ export default {
         return
       }
       updatePassword(data).then(res => {
-        if (res.code === 200) {
-          this.$alert('密码更新成功！')
-          this.oldpassword = ''
-          this.newpassword = ''
-          this.repassword = ''
-          requestAnimationFrame(() => {
-            this.$refs.observer.reset()
-          })
-        }
+        this.$alert(res.msg)
+        this.oldpassword = ''
+        this.newpassword = ''
+        this.repassword = ''
+        requestAnimationFrame(() => {
+          this.$refs.observer.reset()
+        })
       })
     }
   }

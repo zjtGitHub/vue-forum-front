@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 @keyframes shake {
   0%, 100% {
     transform: translateX(0);

@@ -17,6 +17,7 @@
 <script>
 import { updateUserInfo } from '@/api/User'
 import { uploadImg } from '@/api/content'
+import config from '@/config'
 export default {
   name: 'upload',
   data () {
@@ -29,15 +30,19 @@ export default {
     upload (e) {
       const file = e.target.files
       const formData = new FormData()
-      if (file.length > 0) {}
-      formData.append('file', file[0])
-      this.formData = formData
+      if (file.length > 0) {
+        formData.append('file', file[0])
+        this.formData = formData
+      }
 
       // 上传图片后
 
       // 更新用户信息
-      uploadImg(this.formData).then(res => {
+      uploadImg(formData).then(res => {
         if (res.code === 200) {
+          const baseUrl = process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev
+          this.pic = baseUrl + res.path
+
           updateUserInfo({ pic: this.pic }).then(res => {
             const user = this.$store.state.userInfo
             user.pic = this.pic
@@ -45,6 +50,7 @@ export default {
             this.$alert('图片上传成功！')
           })
         }
+        document.getElementById('#pic').value = ''
       })
     }
   }
