@@ -21,6 +21,9 @@ const MyInfo = () => import(/* webpackChunkName: 'MyInfo' */ '../components/user
 const Password = () => import(/* webpackChunkName: 'PassWord' */ '../components/user/common/Password.vue')
 const PicUpload = () => import(/* webpackChunkName: 'PicUpload' */ '../components/user/common/PicUpload.vue')
 const BindAccount = () => import(/* webpackChunkName: 'BindAccount' */ '../components/user/common/BindAccount.vue')
+const MyPost = () => import(/* webpackChunkName: 'mypost' */ '@/components/user/common/MyPost.vue')
+const MyCollection = () => import(/* webpackChunkName: 'mycollection' */ '@/components/user/common/MyCollection.vue')
+const Add = () => import(/* webpackChunkName: 'add' */ '@/components/content/Add.vue')
 const NotFound = () => import(/* webpackChunkName: 'NotFound' */ '../views/404.vue')
 const Confirm = () => import(/* webpackChunkName: 'Confirm' */ '../views/Confirm.vue')
 const Reset = () => import(/* webpackChunkName: 'Reset' */ '../views/Reset.vue')
@@ -76,6 +79,11 @@ const routes = [
     component: Forget
   },
   {
+    path: '/add',
+    name: 'add',
+    component: Add
+  },
+  {
     path: '/user:uid',
     name: 'home',
     props: true,
@@ -122,7 +130,19 @@ const routes = [
       {
         path: 'post',
         name: 'post',
-        component: Post
+        component: Post,
+        children: [
+          {
+            path: 'mypost',
+            name: 'mypost',
+            component: MyPost
+          },
+          {
+            path: 'mycollection',
+            name: 'mycollection',
+            component: MyCollection
+          }
+        ]
       },
       {
         path: 'msg',
@@ -170,6 +190,7 @@ router.beforeEach((to, from, next) => {
       localStorage.clear()
     }
   }
+  // 如果没有token，走到这里，判断去往的页面是否需要鉴权。如果不需要，继续，需要的话，判断store中的isLogin是true，则继续，否则跳往登录页。
   if (to.matched.some(record => record.meta.requiresAuth)) {
     const isLogin = store.state.isLogin
     if (isLogin) {
