@@ -50,5 +50,7 @@ export default {
 .fly-editor {
   height: 260px;
 }
-
+.edit-wrap {
+  position: relative;
+}
 </style>
