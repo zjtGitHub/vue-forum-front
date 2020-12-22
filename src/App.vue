@@ -31,6 +31,7 @@ export default {
 
 <style lang="scss">
   @import "assets/css/global.css";
+  @import "assets/css/layui-layer/layer.css";
   @for $i from 0 to 5 {
     .pd#{$i} {
       padding: $i * 10 + px!important;

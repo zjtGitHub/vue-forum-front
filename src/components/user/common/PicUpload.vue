@@ -50,7 +50,7 @@ export default {
             this.$alert('图片上传成功！')
           })
         }
-        document.getElementById('#pic').value = ''
+        document.getElementById('pic').value = ''
       })
     }
   }
