@@ -1,6 +1,6 @@
 <template>
   <transition name="bounce">
-    <div id="preview" class="layui-layer layui-layer-page layui-layer-prompt edit-content" v-show="isShow" ref="links">
+    <div id="preview" class="layui-layer-page layui-layer-prompt edit-content" v-show="isShow" ref="links">
       <div class="layui-layer-title">预览</div>
       <div class="layui-layer-content">
         <div class="detailBody" v-html="replaceContent"></div>

@@ -170,6 +170,9 @@ export default {
       this.codeHeight = this.$refs.textEdit.offsetHeight - 80
     })
   },
+  updated () {
+    this.$emit('changeContent', this.textContent)
+  },
   methods: {
     focusEvent () {
       this.getPos()

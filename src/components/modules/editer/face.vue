@@ -1,7 +1,7 @@
 <template>
   <transition name="bounce">
     <div
-      class="layui-layer layui-layer-tips layui-edit-face edit-content"
+      class="layui-layer-tips layui-edit-face edit-content"
       v-if="isShow"
     >
       <div class="layui-layer-content">

@@ -17,70 +17,82 @@
                 <ValidationObserver ref="observer">
                   <div class="layui-row layui-col-space15 layui-form-item">
                     <div class="layui-col-md3">
-                      <label class="layui-form-label">所在专栏</label>
-                      <div
-                        class="layui-input-block"
-                        @click="
-                          () => {
-                            this.isSelect = !this.isSelect;
-                          }
-                        "
+                      <validation-provider
+                        name="catalog"
+                        rules="is_not: 请选择"
+                        v-slot="{ errors }"
                       >
-                        <div
-                          class="layui-unselect layui-form-select"
-                          :class="{ 'layui-form-selected': isSelect }"
-                        >
-                          <div class="layui-select-title">
+                        <label class="layui-form-label">所在专栏</label>
+                        <div class="layui-input-block" @click="cataChange">
+                          <div
+                            class="layui-unselect layui-form-select"
+                            :class="{ 'layui-form-selected': isSelect }"
+                          >
+                            <div class="layui-select-title">
+                              <input
+                                type="text"
+                                placeholder="请选择"
+                                readonly
+                                v-model="catalogs[cataIndex].text"
+                                class="layui-input layui-unselect"
+                              />
+                              <i class="layui-edge"></i>
+                            </div>
+                            <dl class="layui-anim layui-anim-upbit">
+                              <dd
+                                v-for="(item, index) in catalogs"
+                                :key="index"
+                                @click="chooseCatalog(item, index)"
+                                :class="{ 'layui-this': index === cataIndex }"
+                              >
+                                {{ item.text }}
+                              </dd>
+                            </dl>
+                          </div>
+                          <div class="layui-row">
+                            <div class="error layui-form-mid">
+                              {{ errors[0] }}
+                            </div>
+                          </div>
+                        </div>
+                      </validation-provider>
+                    </div>
+
+                    <div class="layui-col-md9">
+                      <validation-provider
+                        rules="required"
+                        v-slot="{ errors }"
+                        name="title"
+                      >
+                        <div class="layui-row">
+                          <label for="L_title" class="layui-form-label"
+                            >标题</label
+                          >
+                          <div class="layui-input-block">
                             <input
                               type="text"
-                              placeholder="请选择"
-                              readonly
-                              v-model="catalogs[cataIndex].text"
-                              class="layui-input layui-unselect"
+                              class="layui-input"
+                              v-model="title"
                             />
-                            <i class="layui-edge"></i>
+                            <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
                           </div>
-                          <dl class="layui-anim layui-anim-upbit">
-                            <dd
-                              v-for="(item, index) in catalogs"
-                              :key="index"
-                              @click="chooseCatalog(item, index)"
-                              :class="{ 'layui-this': index === cataIndex }"
-                            >
-                              {{ item.text }}
-                            </dd>
-                          </dl>
                         </div>
-                      </div>
-                    </div>
-                    <div class="layui-col-md9">
-                      <label for="L_title" class="layui-form-label">标题</label>
-                      <div class="layui-input-block">
-                        <input
-                          type="text"
-                          id="L_title"
-                          name="title"
-                          required
-                          lay-verify="required"
-                          autocomplete="off"
-                          class="layui-input"
-                        />
-                        <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
-                      </div>
+                        <div class="layui-row">
+                          <div class="error layui-form-mid">
+                            {{ errors[0] }}
+                          </div>
+                        </div>
+                      </validation-provider>
                     </div>
                   </div>
-                  <editor></editor>
+                  <editor @changeContent="changeContent"></editor>
                   <div class="layui-form-item">
                     <div class="layui-inline">
                       <label class="layui-form-label">悬赏飞吻</label>
                       <div
                         class="layui-input-inline"
                         style="width: 190px"
-                        @click="
-                          () => {
-                            this.isSelect_fav = !this.isSelect_fav;
-                          }
-                        "
+                        @click="favChange"
                       >
                         <div
                           class="layui-unselect layui-form-select"
@@ -121,10 +133,9 @@
                   >
                     <div class="layui-form-item">
                       <div class="layui-row">
-                        <label
-                          for="L_vercode"
-                          class="layui-form-label"
-                        >验证码</label>
+                        <label for="L_vercode" class="layui-form-label"
+                          >验证码</label
+                        >
                         <div class="layui-input-inline">
                           <input
                             v-model="code"
@@ -134,15 +145,15 @@
                             placeholder="请输入验证码"
                             autocomplete="off"
                             class="layui-input"
-                          >
+                          />
                         </div>
                         <div
                           class="layui-form-mid"
-                          style="padding: 0!important;"
+                          style="padding: 0 !important"
                         >
                           <span
                             class="svg"
-                            style="color: #c00;"
+                            style="color: #c00"
                             @click="_getCode()"
                             v-html="svg"
                           />
@@ -186,7 +197,7 @@ export default {
       catalogs: [
         {
           text: '请选择',
-          value: ''
+          value: '请选择'
         },
         {
           text: '提问',
@@ -201,7 +212,9 @@ export default {
           value: 'advise'
         }
       ],
-      favList: [20, 30, 50, 60, 80]
+      favList: [20, 30, 50, 60, 80],
+      content: '',
+      title: ''
     }
   },
   methods: {
@@ -210,10 +223,22 @@ export default {
     },
     chooseFav (item, index) {
       this.favIndex = index
+    },
+    cataChange () {
+      this.isSelect = !this.isSelect
+    },
+    favChange () {
+      this.isSelect_fav = !this.isSelect_fav
+    },
+    changeContent (val) {
+      this.content = val
     }
   }
 }
 </script>
 
-<style>
+<style scoped lang="scss">
+.error {
+  color: red;
+}
 </style>

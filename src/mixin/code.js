@@ -1,4 +1,4 @@
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from '@/utils/utils'
 import { getCode } from '@/api/login'
 import { v4 as uuid } from 'uuid'
 

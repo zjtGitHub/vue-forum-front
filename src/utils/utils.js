@@ -1,5 +1,6 @@
 import { ValidationProvider, extend, localize, ValidationObserver } from 'vee-validate'
-import { required, email, min, max, length, confirmed } from 'vee-validate/dist/rules'
+// eslint-disable-next-line
+import { required, email, min, max, length, confirmed, is_not } from 'vee-validate/dist/rules'
 import zh from 'vee-validate/dist/locale/zh_CN.json'
 
 // 语言本地化
@@ -19,7 +20,9 @@ localize('zh_CN', {
     nickname: '昵称',
     repassword: '确认密码',
     newpassword: '新密码',
-    oldpassword: '旧密码'
+    oldpassword: '旧密码',
+    title: '标题',
+    catalog: '分类'
   },
   fields: { // 对单独表单的规则，自定义提示
     username: {
@@ -27,6 +30,9 @@ localize('zh_CN', {
     },
     password: {
       confirmed: '两次输入不一致你'
+    },
+    catalog: {
+      is_not: '请选择{_field_}'
     }
   }
 })
@@ -37,7 +43,7 @@ extend('max', max)
 extend('length', length)
 extend('confirmed', confirmed)
 extend('required', required)
-
+extend('is_not', is_not)
 export {
   ValidationProvider,
   ValidationObserver

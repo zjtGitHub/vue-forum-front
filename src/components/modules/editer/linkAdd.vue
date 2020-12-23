@@ -1,6 +1,6 @@
 <template>
   <transition name="bounce">
-    <div class="layui-layer layui-layer-page layui-layer-prompt edit-content" v-show="isShow" ref="links">
+    <div class="layui-layer-page layui-layer-prompt edit-content" v-show="isShow" ref="links">
       <div class="layui-layer-title">请输入合法链接</div>
       <div class="layui-layer-content">
         <input type="text" id="link" class="layui-layer-input" v-model="link">
