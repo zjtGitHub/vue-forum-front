@@ -46,7 +46,7 @@ export default {
     submit () {
       if (this.link === '') {
         document.getElementById('link').focus()
-        this.$pop('请输入链接！', 'shake')
+        this.$pop('请输入链接', 'shake')
         return
       }
       this.$emit('addEvent', this.link)

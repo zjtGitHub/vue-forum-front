@@ -65,6 +65,7 @@ export default {
   position: fixed;
   top: 50%;
   left: 50%;
+  z-index: 999;
 }
 .animation {
   animation-duration: .3s;

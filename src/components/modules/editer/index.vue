@@ -39,8 +39,14 @@
           >
             <i class="iconfont icon-emwdaima"></i>
           </span>
-          <span>hr</span>
-          <span>
+          <span @click="insertHr">hr</span>
+          <span
+            @click="
+              () => {
+                this.previewShow = true;
+              }
+            "
+          >
             <i class="iconfont icon-yulan1"></i>
           </span>
         </div>
@@ -57,7 +63,7 @@
     </div>
     <face
       :ctrl="this.$refs.face"
-      @addFaceEvent="selectFace"
+      @addFaceEvent="insertFace"
       @closeEvent="
         () => {
           this.faceShow = false;
@@ -68,7 +74,7 @@
     <img-upload
       :isShow="imgShow"
       :ctrl="this.$refs.img"
-      @addEvent="selectImg"
+      @addEvent="insertImg"
       @closeEvent="
         () => {
           this.imgShow = false;
@@ -79,7 +85,7 @@
     <link-add
       :isShow="linkShow"
       :ctrl="this.$refs.link"
-      @addEvent="selectLink"
+      @addEvent="insertLink"
       @closeEvent="
         () => {
           this.linkShow = false;
@@ -92,7 +98,7 @@
       :ctrl="this.$refs.code"
       :width="codeWidth"
       :height="codeHeight"
-      @addEvent="selectLink"
+      @addEvent="insertCode"
       @closeEvent="
         () => {
           this.codeShow = false;
@@ -100,6 +106,28 @@
       "
     >
     </Code>
+    <quote
+      :isShow="quoteShow"
+      :ctrl="this.$refs.quote"
+      @addEvent="insertQuote"
+      @closeEvent="
+        () => {
+          this.quoteShow = false;
+        }
+      "
+    >
+    </quote>
+    <Preview
+      :isShow="previewShow"
+      :content="textContent"
+      :width="codeWidth"
+      :height="codeHeight"
+      @closeEvent="
+        () => {
+          this.previewShow = false;
+        }
+      "
+    ></Preview>
   </div>
 </template>
 
@@ -107,14 +135,18 @@
 import face from './face'
 import ImgUpload from './imgUpload'
 import LinkAdd from './linkAdd'
+import Quote from './Quote'
 import Code from './Code'
+import Preview from './Preview'
 export default {
   name: 'Editor',
   components: {
     face,
     ImgUpload,
     LinkAdd,
-    Code
+    Quote,
+    Code,
+    Preview
   },
   data () {
     return {
@@ -124,6 +156,7 @@ export default {
       linkShow: false,
       codeShow: false,
       quoteShow: false,
+      previewShow: false,
       codeWidth: 400,
       codeHeight: 200,
       pos: ''
@@ -166,15 +199,34 @@ export default {
     showImg () {
       this.imgShow = !this.imgShow
     },
-    selectFace (val) {
+    insertFace (val) {
       const insertContent = ` face${val}`
       this.insert(insertContent)
+      this.pos += insertContent.length
     },
-    selectImg (val) {
-      this.insert(val)
+    insertImg (val) {
+      const insert = ` img[${val}]`
+      this.insert(insert)
+      this.pos += insert.length
     },
-    selectLink (val) {
-      this.textContent += val
+    insertLink (val) {
+      const insert = ` a(${val})[${val}]`
+      this.insert(insert)
+      this.pos += insert.length
+    },
+    insertCode (val) {
+      const insert = ` \n[pre]\n${val}\n[/pre]`
+      this.insert(insert)
+      this.pos += insert.length
+    },
+    insertQuote (val) {
+      const insert = ` \n[quote]\n${val}\n[/quote]`
+      this.insert(insert)
+      this.pos += insert.length
+    },
+    insertHr (val) {
+      this.insert('\n[hr]')
+      this.pos += 5
     },
     // 插入内容
     insert (val) {

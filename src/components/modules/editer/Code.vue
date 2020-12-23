@@ -52,7 +52,7 @@ export default {
     submit () {
       if (this.code === '') {
         document.getElementById('codeInput').focus()
-        this.$pop('请输入代码！', 'shake')
+        this.$pop('请输入代码', 'shake')
         return
       }
       this.$emit('addEvent', this.code)

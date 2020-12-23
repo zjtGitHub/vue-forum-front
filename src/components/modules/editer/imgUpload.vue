@@ -78,7 +78,7 @@ export default {
     submit () {
       if (this.picUrl === '') {
         document.getElementById('fileInput').focus()
-        this.$pop('请上传图片或输入链接！', 'shake')
+        this.$pop('请上传图片或输入链接', 'shake')
         return
       }
       this.$emit('addEvent', this.picUrl)
