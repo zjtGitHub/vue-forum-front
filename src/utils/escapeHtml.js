@@ -47,6 +47,9 @@ const escapeHtml = (val = '') => {
   // 代码块替换
 
   // hr替换
+  result = result.replace(/\[hr]/g, '<hr>')
+
+  // 回车替换
 
   return result
 }

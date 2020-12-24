@@ -148,18 +148,24 @@ export default {
     Code,
     Preview
   },
+  props: ['initContent'],
   data () {
     return {
       textContent: '',
+      codeWidth: 400,
+      codeHeight: 200,
+      pos: '',
       faceShow: false,
       imgShow: false,
       linkShow: false,
       codeShow: false,
       quoteShow: false,
-      previewShow: false,
-      codeWidth: 400,
-      codeHeight: 200,
-      pos: ''
+      previewShow: false
+    }
+  },
+  watch: {
+    initContent (newval, oldval) {
+      this.textContent = newval
     }
   },
   mounted () {
