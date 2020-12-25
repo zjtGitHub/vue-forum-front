@@ -24,6 +24,7 @@ const BindAccount = () => import(/* webpackChunkName: 'BindAccount' */ '../compo
 const MyPost = () => import(/* webpackChunkName: 'mypost' */ '@/components/user/common/MyPost.vue')
 const MyCollection = () => import(/* webpackChunkName: 'mycollection' */ '@/components/user/common/MyCollection.vue')
 const Add = () => import(/* webpackChunkName: 'add' */ '@/components/content/Add.vue')
+const Detail = () => import(/* webpackChunkName: 'detail' */ '@/components/content/Detail.vue')
 const NotFound = () => import(/* webpackChunkName: 'NotFound' */ '../views/404.vue')
 const Confirm = () => import(/* webpackChunkName: 'Confirm' */ '../views/Confirm.vue')
 const Reset = () => import(/* webpackChunkName: 'Reset' */ '../views/Reset.vue')
@@ -83,6 +84,11 @@ const routes = [
     name: 'add',
     meta: { requiresAuth: true },
     component: Add
+  },
+  {
+    path: '/detail',
+    name: 'detail',
+    component: Detail
   },
   {
     path: '/user:uid',

@@ -270,11 +270,14 @@ export default {
         code: this.code,
         sid: this.$store.state.sid
       }).then((res) => {
-        console.log(res, 666)
         if (res.code) {
           this.$alert('帖子发表成功!')
           localStorage.setItem('saveData', '')
+        } else {
+          this.$alert(res.msg)
         }
+      }).catch((err) => {
+        console.log(err)
       })
     }
   }
