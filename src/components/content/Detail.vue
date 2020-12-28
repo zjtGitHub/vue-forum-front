@@ -182,14 +182,11 @@
               </li>
 
               <!-- 无数据时 -->
-              <li class="fly-none">消灭零回复</li>
+              <!-- <li class="fly-none">消灭零回复</li> -->
             </ul>
-
+            <my-pagination :total="100"></my-pagination>
             <div class="layui-form layui-form-pane">
-              <my-Editor
-                @changeContent="changeContent"
-                :initContent="content"
-              ></my-Editor>
+              <my-Editor :initContent="content"></my-Editor>
               <validation-provider
                 rules="required|length:4"
                 ref="codefield"
@@ -250,6 +247,7 @@ import Ads from '@/components/sidebar/Ads'
 import Links from '@/components/sidebar/Links'
 import Panel from '@/components/Panel'
 import Editor from '../modules/editer/index'
+import Pagination from '../modules/pagination/Page'
 import CodeMix from '@/mixin/code'
 import { addPost } from '@/api/content'
 export default {
@@ -260,7 +258,13 @@ export default {
     'my-links': Links,
     'my-ads': Ads,
     'my-panel': Panel,
-    'my-Editor': Editor
+    'my-Editor': Editor,
+    'my-pagination': Pagination
+  },
+  data () {
+    return {
+      content: ''
+    }
   },
   methods: {
     async onSubmit () {
