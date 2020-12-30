@@ -36,11 +36,16 @@ const uploadImg = (formData) => axios.post('/content/uploadImg', formData)
 // 发表帖子
 const addPost = (data) => axios.post('/content/add', { ...data })
 
+// 获取文章详情
+const getDetail = (tid) => {
+  return axios.get('/public/detail?tid=' + tid)
+}
 export {
   getList,
   getTips,
   getLinks,
   getTop,
   uploadImg,
-  addPost
+  addPost,
+  getDetail
 }

@@ -10,7 +10,7 @@
         </a>
         <h2>
           <a class="layui-badge">{{ catalog }}</a>
-          <a>{{ item.title }}</a>
+          <a @click.prevent="toDetail(item)">{{ item.title }}</a>
         </h2>
         <div class="fly-list-info">
           <a>
@@ -91,6 +91,9 @@ export default {
   methods: {
     more () {
       this.$emit('nextPage')
+    },
+    toDetail (item) {
+      this.$router.push(`/detail/${item._id}`)
     }
   },
   filters: {

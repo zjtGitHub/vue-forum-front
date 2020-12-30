@@ -86,7 +86,8 @@ const routes = [
     component: Add
   },
   {
-    path: '/detail',
+    path: '/detail/:tid',
+    props: true,
     name: 'detail',
     component: Detail
   },
