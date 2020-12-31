@@ -9,17 +9,24 @@
             <div class="fly-detail-info">
               <!-- <span class="layui-badge">审核中</span> -->
 
-              <span class="layui-badge layui-bg-green fly-detail-column"
-                >{{ page.catalog }}</span
-              >
+              <span class="layui-badge layui-bg-green fly-detail-column">{{
+                page.catalog
+              }}</span>
 
-              <span class="layui-badge" style="background-color: #999" v-if="page.isEnd"
+              <span
+                class="layui-badge"
+                style="background-color: #999"
+                v-if="page.isEnd"
                 >未结</span
               >
               <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
 
-              <span class="layui-badge layui-bg-black" v-if="page.isTop">置顶</span>
-              <span class="layui-badge layui-bg-red" v-if="page.isTop">精帖</span>
+              <span class="layui-badge layui-bg-black" v-if="page.isTop"
+                >置顶</span
+              >
+              <span class="layui-badge layui-bg-red" v-if="page.isTop"
+                >精帖</span
+              >
 
               <!-- <div class="fly-admin-box">
                 <span class="layui-btn layui-btn-xs jie-admin" type="del"
@@ -46,7 +53,8 @@
               </div> -->
               <span class="fly-list-nums">
                 <a href="#comment"
-                  ><i class="iconfont" title="回答">&#xe60c;</i> {{ page.answer }}</a
+                  ><i class="iconfont" title="回答">&#xe60c;</i>
+                  {{ page.answer }}</a
                 >
                 <i class="iconfont" title="人气">&#xe60b;</i> {{ page.reads }}
               </span>
@@ -55,20 +63,29 @@
             <div class="detail-about">
               <a class="fly-avatar">
                 <img
-                  :src="page.uid ? page.uid.pic : require('@/assets/logo.png')"
+                  :src="
+                    page.user ? page.user.pic : require('@/assets/logo.png')
+                  "
                 />
               </a>
               <div class="fly-detail-user">
                 <a class="fly-link">
-                  <cite>{{ page.uid.name }}</cite>
-                  <i class="iconfont icon-renzheng" v-if="page.uid && page.uid.isVip !== '0'"></i>
-                  <i class="layui-badge fly-badge-vip" v-if="page.uid && page.uid.isVip !== '0'">{{ page.uid.isVip }}</i>
+                  <cite>{{ page.user.name }}</cite>
+                  <i
+                    class="iconfont icon-renzheng"
+                    v-if="page.user && page.user.isVip !== '0'"
+                  ></i>
+                  <i
+                    class="layui-badge fly-badge-vip"
+                    v-if="page.user && page.user.isVip !== '0'"
+                    >VIP{{ page.user.isVip }}</i
+                  >
                 </a>
                 <span>{{ page.created }}</span>
               </div>
               <div class="detail-hits">
                 <span style="padding-right: 10px; color: #ff7200"
-                  >悬赏：{{ page.favs }}飞吻</span
+                  >悬赏：{{ page.fav }}飞吻</span
                 >
               </div>
             </div>
@@ -78,7 +95,7 @@
                 >收藏</a
               >
             </div>
-            <div class="detail-body photos">{{page.content}}</div>
+            <div class="detail-body photos">{{ page.content }}</div>
           </div>
 
           <div class="fly-panel detail-box" id="flyReply">
@@ -90,26 +107,31 @@
             </fieldset>
 
             <ul class="jieda" id="jieda">
-              <li data-id="111" class="jieda-daan">
+              <li
+                class="jieda-daan"
+                v-for="(item, index) in comments"
+                :key="index"
+              >
                 <a name="item-1111111111"></a>
                 <div class="detail-about detail-about-reply">
-                  <a class="fly-avatar" href="">
-                    <img
-                      src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
-                      alt=" "
-                    />
+                  <a class="fly-avatar">
+                    <img :src="item.pic" />
                   </a>
                   <div class="fly-detail-user">
                     <a href="" class="fly-link">
-                      <cite>贤心</cite>
+                      <cite>{{ item.name }}</cite>
                       <i
                         class="iconfont icon-renzheng"
-                        title="认证信息：XXX"
+                        v-if="item.user && item.user.isVip !== '0'"
                       ></i>
-                      <i class="layui-badge fly-badge-vip">VIP3</i>
+                      <i
+                        class="layui-badge fly-badge-vip"
+                        v-if="item.user && item.user.isVip !== '0'"
+                        >VIP{{ item.user.isVip }}</i
+                      >
                     </a>
 
-                    <span>(楼主)</span>
+                    <span v-if="index === 0">(楼主)</span>
                     <!--
                 <span style="color:#5FB878">(管理员)</span>
                 <span style="color:#FF9E3F">（社区之光）</span>
@@ -118,7 +140,7 @@
                   </div>
 
                   <div class="detail-hits">
-                    <span>2017-11-30</span>
+                    <span>{{ item.created }}</span>
                   </div>
 
                   <i class="iconfont icon-caina" title="最佳答案"></i>
@@ -143,46 +165,8 @@
                 </div>
               </li>
 
-              <li data-id="111">
-                <a name="item-1111111111"></a>
-                <div class="detail-about detail-about-reply">
-                  <a class="fly-avatar" href="">
-                    <img
-                      src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
-                      alt=" "
-                    />
-                  </a>
-                  <div class="fly-detail-user">
-                    <a href="" class="fly-link">
-                      <cite>贤心</cite>
-                    </a>
-                  </div>
-                  <div class="detail-hits">
-                    <span>2017-11-30</span>
-                  </div>
-                </div>
-                <div class="detail-body jieda-body photos">
-                  <p>蓝瘦那个香菇，这是一条没被采纳的回帖</p>
-                </div>
-                <div class="jieda-reply">
-                  <span class="jieda-zan" type="zan">
-                    <i class="iconfont icon-zan"></i>
-                    <em>0</em>
-                  </span>
-                  <span type="reply">
-                    <i class="iconfont icon-svgmoban53"></i>
-                    回复
-                  </span>
-                  <div class="jieda-admin">
-                    <span type="edit">编辑</span>
-                    <span type="del">删除</span>
-                    <span class="jieda-accept" type="accept">采纳</span>
-                  </div>
-                </div>
-              </li>
-
               <!-- 无数据时 -->
-              <!-- <li class="fly-none">消灭零回复</li> -->
+              <li class="fly-none" v-if="comments.length">消灭零回复</li>
             </ul>
             <my-pagination :total="100"></my-pagination>
             <div class="layui-form layui-form-pane">
