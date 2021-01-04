@@ -70,7 +70,7 @@
               </a>
               <div class="fly-detail-user">
                 <a class="fly-link">
-                  <cite>{{ page.user.name }}</cite>
+                  <cite v-if="page.user">{{ page.user.name }}</cite>
                   <i
                     class="iconfont icon-renzheng"
                     v-if="page.user && page.user.isVip !== '0'"
@@ -95,9 +95,9 @@
                 >收藏</a
               >
             </div>
-            <div class="detail-body photos">{{ page.content }}</div>
+            <div class="detail-body photos" v-html="replaceContent"></div>
           </div>
-
+          <!-- 回复列表 -->
           <div class="fly-panel detail-box" id="flyReply">
             <fieldset
               class="layui-elem-field layui-field-title"
@@ -166,7 +166,7 @@
               </li>
 
               <!-- 无数据时 -->
-              <li class="fly-none" v-if="comments.length">消灭零回复</li>
+              <li class="fly-none" v-if="comments.length === 0">消灭零回复</li>
             </ul>
             <my-pagination :total="100"></my-pagination>
             <div class="layui-form layui-form-pane">
@@ -235,6 +235,7 @@ import Pagination from '../modules/pagination/Page'
 import CodeMix from '@/mixin/code'
 import { addPost, getDetail } from '@/api/content'
 import { getCommentList } from '@/api/comments'
+import { escapeHtml } from '@/utils/escapeHtml'
 export default {
   name: 'Detail',
   mixins: [CodeMix],
@@ -253,6 +254,14 @@ export default {
       current: 2,
       page: {},
       comments: []
+    }
+  },
+  computed: {
+    replaceContent () {
+      if (typeof this.page.content === 'undefined' || this.page.content.trim() === '') {
+        return
+      }
+      return escapeHtml(this.page.content)
     }
   },
   props: ['tid'],
@@ -288,8 +297,8 @@ export default {
       })
     },
     getCommentList () {
-      getCommentList().then((res) => {
-
+      getCommentList(this.tid).then((res) => {
+        console.log(res)
       })
     },
     getDetail () {
