@@ -1,12 +1,20 @@
 <template>
   <transition name="bounce">
-    <div id="preview" class="layui-layer-page layui-layer-prompt edit-content" v-show="isShow" ref="links">
+    <div
+      id="preview"
+      class="layui-layer-page layui-layer-prompt edit-content"
+      v-show="isShow"
+      ref="links"
+    >
       <div class="layui-layer-title">预览</div>
       <div class="layui-layer-content">
         <div class="detailBody" v-html="replaceContent"></div>
       </div>
       <span class="layui-layer-setwin" @click="close">
-        <a href="javascript:void(0)" class="layui-layer-ico layui-layer-close layui-layer-close1"></a>
+        <a
+          href="javascript:void(0)"
+          class="layui-layer-ico layui-layer-close layui-layer-close1"
+        ></a>
       </span>
     </div>
   </transition>
@@ -47,5 +55,4 @@ export default {
   top: 60px;
   left: 0;
 }
-
 </style>

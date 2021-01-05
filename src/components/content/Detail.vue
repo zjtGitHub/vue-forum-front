@@ -97,6 +97,7 @@
             </div>
             <div class="detail-body photos" v-html="replaceContent"></div>
           </div>
+          <!-- ------------------------------------------------------------------------------------- -->
           <!-- 回复列表 -->
           <div class="fly-panel detail-box" id="flyReply">
             <fieldset
@@ -143,15 +144,19 @@
                     <span>{{ item.created }}</span>
                   </div>
 
-                  <i class="iconfont icon-caina" title="最佳答案"></i>
+                  <i
+                    class="iconfont icon-caina"
+                    v-if="item.isBest !== '0'"
+                    title="最佳答案"
+                  ></i>
                 </div>
                 <div class="detail-body jieda-body photos">
-                  <p>香菇那个蓝瘦，这是一条被采纳的回帖</p>
+                  <p v-html="item.content"></p>
                 </div>
                 <div class="jieda-reply">
                   <span class="jieda-zan zanok" type="zan">
                     <i class="iconfont icon-zan"></i>
-                    <em>66</em>
+                    <em>{{ item.hands }}</em>
                   </span>
                   <span type="reply">
                     <i class="iconfont icon-svgmoban53"></i>
@@ -298,7 +303,9 @@ export default {
     },
     getCommentList () {
       getCommentList(this.tid).then((res) => {
-        console.log(res)
+        if (res.code === 200) {
+          this.comments = res.data
+        }
       })
     },
     getDetail () {
