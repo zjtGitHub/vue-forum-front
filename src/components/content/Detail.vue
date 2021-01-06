@@ -173,7 +173,7 @@
               <!-- 无数据时 -->
               <li class="fly-none" v-if="comments.length === 0">消灭零回复</li>
             </ul>
-            <my-pagination :total="100"></my-pagination>
+            <my-pagination :total="total" :current="current" :showEnd="true"></my-pagination>
             <div class="layui-form layui-form-pane">
               <my-Editor :initContent="content"></my-Editor>
               <validation-provider
@@ -256,7 +256,8 @@ export default {
     return {
       content: '',
       size: 10,
-      current: 2,
+      current: 1,
+      total: 0,
       page: {},
       comments: []
     }
@@ -305,6 +306,7 @@ export default {
       getCommentList(this.tid).then((res) => {
         if (res.code === 200) {
           this.comments = res.data
+          this.total = res.total
         }
       })
     },

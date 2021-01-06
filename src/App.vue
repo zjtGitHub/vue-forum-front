@@ -56,4 +56,9 @@ export default {
   .pull-right {
     float: right!important;
   }
+  .d-hide {
+    position: absolute;
+    overflow: hidden;
+    height: 50%;
+  }
 </style>
