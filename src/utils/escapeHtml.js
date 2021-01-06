@@ -1,5 +1,14 @@
 import faces from '@/assets/js/face'
 
+// 把
+const htmlEncode = (html) => {
+  let temp = document.createElement('div')
+  temp.textContent !== undefined ? (temp.textContent = html) : (temp.innerText = html)
+  const output = temp.innerHTML
+  temp = null
+  return output
+}
+
 const escapeHtml = (val = '') => {
   if (!val) { return }
 
@@ -9,7 +18,9 @@ const escapeHtml = (val = '') => {
   if (faceReg.test(result)) {
     const group = result.match(faceReg)
     group.map((item) => {
+      console.log(item)
       const key = item.match(/\[\S+]/g)[0]
+      console.log(item.match(/\[\S+]/g))
       result = result.replace(item, `<img src="${faces[key]}">`)
     })
   }
@@ -45,11 +56,22 @@ const escapeHtml = (val = '') => {
   result = result.replace(/\[quote]/g, '<div class="layui-elem-quote">')
   result = result.replace(/\[\/quote]/g, '</div>')
   // 代码块替换
+  const code = /(\[\/?pre(.+?)[^\]]*\])|\[[^\]]*\]/g
+  if (code.test(result)) {
+    const group = result.match(code)
+    group.map((item) => {
+      result = result.replace(item, htmlEncode(item))
+    })
+    result = result.replace(/\[pre\]/g, '<pre>')
+    result = result.replace(/\[\/pre\]/g, '</pre>')
+  }
 
   // hr替换
   result = result.replace(/\[hr]/g, '<hr>')
 
   // 回车替换
+  result = result.replace(/\r\n/g, '<br>')
+  result = result.replace(/\n/g, '<br>')
 
   return result
 }

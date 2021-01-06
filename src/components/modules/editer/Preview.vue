@@ -30,6 +30,15 @@ export default {
     }
   },
   props: ['isShow', 'content'],
+  watch: {
+    isShow (newval, oldval) {
+      if (newval) {
+        this.$store.commit('setHide', true)
+      } else {
+        this.$store.commit('setHide', false)
+      }
+    }
+  },
   methods: {
     close () {
       this.$emit('closeEvent')
@@ -46,7 +55,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 #preview {
   position: fixed;
   width: 100%;
@@ -54,5 +63,19 @@ export default {
   background: #ffffff;
   top: 60px;
   left: 0;
+  overflow: auto;
+}
+
+pre {
+  position: relative;
+  margin: 10px 0;
+  padding: 15px;
+  line-height: 20px;
+  background: #f2f2f2;
+  color: #333;
+  font-family: "Courier New", Courier, monospace, serif;
+  font-size: 12px;
+  border: none;
+  border-left: 5px solid #ddd;
 }
 </style>
