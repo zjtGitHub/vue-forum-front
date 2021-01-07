@@ -185,7 +185,6 @@ router.beforeEach((to, from, next) => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if (token !== '' && token !== null) {
     const payload = jwt.decode(token)
-    console.log(moment().isBefore(moment(payload.exp * 1000)))
     if (moment().isBefore(moment(payload.exp * 1000))) {
       // 如果缓存中存在token并且没过期 直接登录
       store.commit('setToken', token)

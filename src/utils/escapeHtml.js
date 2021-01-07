@@ -18,9 +18,7 @@ const escapeHtml = (val = '') => {
   if (faceReg.test(result)) {
     const group = result.match(faceReg)
     group.map((item) => {
-      console.log(item)
       const key = item.match(/\[\S+]/g)[0]
-      console.log(item.match(/\[\S+]/g))
       result = result.replace(item, `<img src="${faces[key]}">`)
     })
   }

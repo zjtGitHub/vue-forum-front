@@ -57,11 +57,6 @@
 </template>
 
 <script>
-import moment from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import relativeTime from 'dayjs/plugin/relativeTime'
-moment.locale('zh-cn')
-moment.extend(relativeTime)
 export default {
   name: 'ListItem',
   props: {
@@ -108,15 +103,6 @@ export default {
     },
     toDetail (item) {
       this.$router.push(`/detail/${item._id}`)
-    }
-  },
-  filters: {
-    moment (date) {
-      if (!moment(date).isBefore(moment().subtract(7, 'day'))) {
-        return moment(date).fromNow()
-      } else {
-        return moment(date).format('YYYY-MM-DD')
-      }
     }
   }
 }

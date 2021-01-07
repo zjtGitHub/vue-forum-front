@@ -81,7 +81,7 @@
                     >VIP{{ page.user.isVip }}</i
                   >
                 </a>
-                <span>{{ page.created }}</span>
+                <span>{{ page.created | time }}</span>
               </div>
               <div class="detail-hits">
                 <span style="padding-right: 10px; color: #ff7200"
@@ -95,7 +95,8 @@
                 >收藏</a
               >
             </div>
-            <div class="detail-body photos" v-html="replaceContent"></div>
+            <!-- 帖子详情 -->
+            <div class="detail-body photos" v-richtext="page.content"></div>
           </div>
           <!-- ------------------------------------------------------------------------------------- -->
           <!-- 回复列表 -->
@@ -111,28 +112,31 @@
               <li
                 class="jieda-daan"
                 v-for="(item, index) in comments"
-                :key="index"
+                :key="'commments' + index"
               >
-                <a name="item-1111111111"></a>
                 <div class="detail-about detail-about-reply">
                   <a class="fly-avatar">
-                    <img :src="item.pic" />
+                    <img
+                      :src="
+                        item.cuid ? item.cuid.pic : require('@/assets/logo.png')
+                      "
+                    />
                   </a>
                   <div class="fly-detail-user">
                     <a href="" class="fly-link">
-                      <cite>{{ item.name }}</cite>
+                      <cite v-if="item.cuid">{{ item.cuid.name }}</cite>
                       <i
                         class="iconfont icon-renzheng"
-                        v-if="item.user && item.user.isVip !== '0'"
+                        v-if="item.cuid && item.cuid.isVip !== '0'"
                       ></i>
                       <i
                         class="layui-badge fly-badge-vip"
-                        v-if="item.user && item.user.isVip !== '0'"
-                        >VIP{{ item.user.isVip }}</i
+                        v-if="item.cuid && item.cuid.isVip !== '0'"
+                        >VIP{{ item.cuid.isVip }}</i
                       >
                     </a>
 
-                    <span v-if="index === 0">(楼主)</span>
+                    <span v-if="item.cuid._id === page.user._id">(楼主)</span>
                     <!--
                 <span style="color:#5FB878">(管理员)</span>
                 <span style="color:#FF9E3F">（社区之光）</span>
@@ -141,20 +145,25 @@
                   </div>
 
                   <div class="detail-hits">
-                    <span>{{ item.created }}</span>
+                    <span>{{ item.created | moment }}</span>
                   </div>
 
                   <i
                     class="iconfont icon-caina"
-                    v-if="item.isBest !== '0'"
+                    v-if="item.isBest === '1'"
                     title="最佳答案"
                   ></i>
                 </div>
+                <!-- 评论内容 -->
                 <div class="detail-body jieda-body photos">
-                  <p v-html="item.content"></p>
+                  <p v-richtext="item.content"></p>
                 </div>
                 <div class="jieda-reply">
-                  <span class="jieda-zan zanok" type="zan">
+                  <span
+                    class="jieda-zan"
+                    :class="{ zanok: item.handed === '1' }"
+                    type="zan"
+                  >
                     <i class="iconfont icon-zan"></i>
                     <em>{{ item.hands }}</em>
                   </span>
@@ -163,9 +172,18 @@
                     回复
                   </span>
                   <div class="jieda-admin">
-                    <span type="edit">编辑</span>
+                    <span
+                      v-if="!page.isEnd && item.cuid._id === user._id"
+                      @click="editReply(item)"
+                      >编辑</span
+                    >
                     <span type="del">删除</span>
-                    <!-- <span class="jieda-accept" type="accept">采纳</span> -->
+                    <span
+                      v-if="!page.isEnd && page.user._id === user._id"
+                      @click="setBest(item)"
+                      class="jieda-accept"
+                      >采纳</span
+                    >
                   </div>
                 </div>
               </li>
@@ -173,48 +191,69 @@
               <!-- 无数据时 -->
               <li class="fly-none" v-if="comments.length === 0">消灭零回复</li>
             </ul>
-            <my-pagination :total="total" :current="current" :showEnd="true"></my-pagination>
+            <my-pagination
+              v-if="comments.length !== 0"
+              :total="total"
+              :current="current"
+              :showEnd="true"
+              :hasSelect="true"
+              :hasTotal="true"
+              @changeSize="handleChangeSize"
+              @changeCurrent="handleChangeCurrent"
+            ></my-pagination>
+
+            <!-- 回复模块 -->
             <div class="layui-form layui-form-pane">
-              <my-Editor :initContent="content"></my-Editor>
-              <validation-provider
-                rules="required|length:4"
-                ref="codefield"
-                v-slot="{ errors }"
-                name="验证码"
-              >
-                <div class="layui-form-item">
-                  <div class="layui-row">
-                    <label for="L_vercode" class="layui-form-label"
-                      >验证码</label
-                    >
-                    <div class="layui-input-inline">
-                      <input
-                        v-model="code"
-                        type="text"
-                        id="L_vercode"
-                        name="code"
-                        placeholder="请输入验证码"
-                        autocomplete="off"
-                        class="layui-input"
-                      />
+              <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
+                <form @submit.prevent="handleSubmit(onSubmit)">
+                  <my-Editor
+                    @changeContent="addContent"
+                    :initContent="editInfo.content"
+                  ></my-Editor>
+                  <validation-provider
+                    rules="required|length:4"
+                    ref="codefield"
+                    v-slot="{ errors }"
+                    name="验证码"
+                  >
+                    <div class="layui-form-item">
+                      <div class="layui-row">
+                        <label for="L_vercode" class="layui-form-label"
+                          >验证码</label
+                        >
+                        <div class="layui-input-inline">
+                          <input
+                            v-model="code"
+                            type="text"
+                            id="L_vercode"
+                            name="code"
+                            placeholder="请输入验证码"
+                            autocomplete="off"
+                            class="layui-input"
+                          />
+                        </div>
+                        <div
+                          class="layui-form-mid"
+                          style="padding: 0 !important"
+                        >
+                          <span
+                            class="svg"
+                            style="color: #c00; position: relative; top: -7px"
+                            @click="_getCode()"
+                            v-html="svg"
+                          />
+                        </div>
+                      </div>
+                      <div class="error layui-form-mid">
+                        {{ errors[0] }}
+                      </div>
                     </div>
-                    <div class="layui-form-mid" style="padding: 0 !important">
-                      <span
-                        class="svg"
-                        style="color: #c00"
-                        @click="_getCode()"
-                        v-html="svg"
-                      />
-                    </div>
+                  </validation-provider>
+                  <div class="layui-form-item">
+                    <button class="layui-btn" type="submit">提交回复</button>
                   </div>
-                  <div class="error layui-form-mid">
-                    {{ errors[0] }}
-                  </div>
-                </div>
-              </validation-provider>
-              <div class="layui-form-item">
-                <button class="layui-btn" type="submit">提交回复</button>
-              </div>
+                </form>
+              </ValidationObserver>
             </div>
           </div>
         </div>
@@ -238,9 +277,9 @@ import Panel from '@/components/Panel'
 import Editor from '../modules/editer/index'
 import Pagination from '../modules/pagination/Page'
 import CodeMix from '@/mixin/code'
-import { addPost, getDetail } from '@/api/content'
-import { getCommentList } from '@/api/comments'
-import { escapeHtml } from '@/utils/escapeHtml'
+import { getDetail } from '@/api/content'
+import { getCommentList, addComment, editComment, setBest } from '@/api/comments'
+import { scrollToElem } from '@/utils/common'
 export default {
   name: 'Detail',
   mixins: [CodeMix],
@@ -256,18 +295,20 @@ export default {
     return {
       content: '',
       size: 10,
-      current: 1,
+      current: 0,
       total: 0,
       page: {},
-      comments: []
+      comments: [],
+      editInfo: {
+        content: '',
+        code: '',
+        sid: ''
+      }
     }
   },
   computed: {
-    replaceContent () {
-      if (typeof this.page.content === 'undefined' || this.page.content.trim() === '') {
-        return
-      }
-      return escapeHtml(this.page.content)
+    user () {
+      return this.$store.state.userInfo
     }
   },
   props: ['tid'],
@@ -275,35 +316,111 @@ export default {
     this.getDetail()
     this.getCommentList()
   },
+  watch: {
+    tid (newval, oldval) {
+      this.getDetail()
+      this.getCommentList()
+    }
+  },
   methods: {
+    // 提交回复
     async onSubmit () {
-      if (this.content.trim() === '') {
-        this.$alert('文章内容不得为空!')
+      if (this.editInfo.content.trim() === '') {
+        this.$alert('评论内容不得为空!')
         return
       }
-      addPost({
-        title: this.title,
-        catalog: this.catalogs[this.cataIndex].value,
-        content: this.content,
-        fav: this.favList[this.favIndex],
-        code: this.code,
-        sid: this.$store.state.sid
-      }).then((res) => {
-        if (res.code === 200) {
-          this.$alert('帖子发表成功!')
-          localStorage.setItem('saveData', '')
-          setTimeout(() => {
-            this.$router.push('/')
-          }, 2000)
-        } else {
-          this.$alert(res.msg)
+      // 判断用户是否登录
+      const isLogin = this.$store.state.isLogin
+      if (!isLogin) {
+        this.$pop('请先登录!', 'shake')
+        return
+      }
+      // 用户禁言状态判断
+      const user = this.$store.state.userInfo
+      if (user.status !== '0') {
+        this.$pop('用户已经禁言，请联系管理员', 'shake')
+        return
+      }
+      this.editInfo.code = this.code
+      this.editInfo.sid = this.$store.state.sid
+      this.editInfo.tid = this.tid
+      // 判断是否有cid，有cid说明是编辑评论
+      if (
+        typeof this.editInfo.cid !== 'undefined' &&
+        this.editInfo.cid !== ''
+      ) {
+        const obj = { ...this.editInfo }
+        delete obj.item
+        // 判断用户是否修改了内容
+        if (this.editInfo.content === this.editInfo.item.content) {
+          this.$pop('shake', '确定编辑了内容~~~')
+          return
         }
-      }).catch((err) => {
-        console.log(err)
+        // 更新评论
+        editComment(obj).then((res) => {
+          if (res.code === 200) {
+            const temp = this.editInfo.item
+            temp.content = this.editInfo.content
+            this.$pop('更新评论成功')
+            this.refresh()
+          }
+        })
+        return
+      }
+      addComment(this.editInfo).then((res) => {
+        if (res.code === 200) {
+          this.$pop('评论成功!')
+          this.refresh()
+        } else if (res.code === 500) {
+          this.$pop('验证码输入错误！')
+        }
       })
     },
+    // 成功回调，刷新列表，清空表单
+    refresh () {
+      this.code = ''
+      this.editInfo.content = ''
+      requestAnimationFrame(() => {
+        this.$refs.observer && this.$refs.observer.reset()
+      })
+      this.getCommentList()
+      this._getCode()
+    },
+    // 编辑器输入回调
+    addContent (val) {
+      this.editInfo.content = val
+    },
+    // 编辑回复
+    editReply (item) {
+      this.editInfo.content = item.content
+      // 动态滚动到编辑器位置并focus
+      scrollToElem('.layui-input-block', 500, -65)
+      document.getElementById('edit').focus()
+      // 设置参数，编辑的是哪条评论
+      this.editInfo.cid = item._id
+      this.editInfo.item = item
+    },
+    // 采纳最佳答案
+    setBest (item) {
+      this.$confirm('确定采纳为最佳答案吗？', () => {
+        // 发送采纳最佳答案请求
+        setBest({
+          cid: item._id,
+          tid: this.tid
+        }).then((res) => {
+          if (res.code === 200) {
+            this.$pop('设置最佳答案成功！')
+            this.getCommentList()
+          }
+        })
+      }, () => {})
+    },
     getCommentList () {
-      getCommentList(this.tid).then((res) => {
+      getCommentList({
+        tid: this.tid,
+        limit: this.size,
+        page: this.current
+      }).then((res) => {
         if (res.code === 200) {
           this.comments = res.data
           this.total = res.total
@@ -319,6 +436,15 @@ export default {
         console.log(err)
         this.$router.push('/404')
       })
+    },
+    handleChangeSize (val, current) {
+      this.size = val
+      this.current = current
+      this.getCommentList()
+    },
+    handleChangeCurrent (val) {
+      this.current = val
+      this.getCommentList()
     }
   }
 }

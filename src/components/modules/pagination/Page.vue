@@ -1,45 +1,62 @@
 <template>
   <div
     class="d-flex"
-    :class="{'flex-center': align==='center', 'flex-start': align === 'left', 'flex-end': align === 'right'}"
+    :class="{
+      'flex-center': align === 'center',
+      'flex-start': align === 'left',
+      'flex-end': align === 'right',
+    }"
   >
     <div class="layui-box layui-laypage layui-laypage-default">
       <a
         href="javascript:;"
         class="layui-laypage-prev"
-        :class="{'layui-disabled': current === 0}"
+        :class="{ 'layui-disabled': current === 0 }"
         v-show="showEnd"
         @click.prevent="home()"
       >
         <i class="layui-icon layui-icon-prev" v-if="showType === 'icon'"></i>
         <template v-else>首页</template>
       </a>
-      <a :class="{'layui-disabled': current === 0}" @click.prevent="prev()">
+      <a :class="{ 'layui-disabled': current === 0 }" @click.prevent="prev()">
         <i class="layui-icon layui-icon-left" v-if="showType === 'icon'"></i>
         <template v-else>上一页</template>
       </a>
       <!-- current + 2 < pages.length 显示 ... -->
       <!-- current - 2 > 1 显示 ... -->
       <a
-        v-if="pages.length > 5 && (current + 1 - 2) > 1"
+        v-if="pages.length > 5 && current + 1 - 2 > 1"
         href="javascript:;"
         class="layui-disabled"
-      >...</a>
-      <template v-for="(item,index) in pages">
+        >...</a
+      >
+      <template v-for="(item, index) in pages">
         <a
           @click="changeIndex(index)"
-          v-if="(item>=(current + 1 - 2) && item <=(current + 1 + 2)) || (current  < 2 && item <= dist) || (current > pages.length - dist + 1 && item > pages.length - dist)"
+          v-if="
+            (item >= current + 1 - 2 && item <= current + 1 + 2) ||
+            (current < 2 && item <= dist) ||
+            (current > pages.length - dist + 1 && item > pages.length - dist)
+          "
           href="javascript:;"
           :key="'page' + index"
-          :class="[current === index ? theme : '',current === index ? 'active': '']"
-        >{{item}}</a>
+          :class="[
+            current === index ? theme : '',
+            current === index ? 'active' : '',
+          ]"
+          >{{ item }}</a
+        >
       </template>
       <a
-        v-if="pages.length > 5 && (current + 1 + 2) < pages.length"
+        v-if="pages.length > 5 && current + 1 + 2 < pages.length"
         href="javascript:;"
         class="layui-disabled"
-      >...</a>
-      <a :class="{'layui-disabled': current === pages.length - 1}" @click.prevent="next()">
+        >...</a
+      >
+      <a
+        :class="{ 'layui-disabled': current === pages.length - 1 }"
+        @click.prevent="next()"
+      >
         <i class="layui-icon layui-icon-right" v-if="showType === 'icon'"></i>
         <template v-else>下一页</template>
       </a>
@@ -47,7 +64,7 @@
         href="javascript:;"
         class="layui-laypage-next"
         v-show="showEnd"
-        :class="{'layui-disabled': current === pages.length - 1}"
+        :class="{ 'layui-disabled': current === pages.length - 1 }"
         @click.prevent="end()"
       >
         <i class="layui-icon layui-icon-next" v-if="showType === 'icon'"></i>
@@ -56,13 +73,18 @@
     </div>
     <div class="total" v-if="hasTotal">
       到第
-      <input type="text" class="imooc-input text-center" @keyup.enter="jumpTo" />
-      页 共 {{totalPages}} 页
+      <input
+        type="text"
+        class="imooc-input text-center"
+        @keyup.enter="jumpTo"
+      />
+      页 共 {{ totalPages }} 页
     </div>
-    <div v-if="hasSelect">
+    <template v-if="hasSelect">
       <div
+        style="display: inline-block"
         class="layui-unselect layui-form-select"
-        :class="{'layui-form-selected': isSelect}"
+        :class="{ 'layui-form-selected': isSelect }"
         @click="changeFav()"
       >
         <div class="layui-select-title">
@@ -77,14 +99,16 @@
         </div>
         <dl class="layui-anim layui-anim-upbit">
           <dd
-            v-for="(item,index) in options"
+            v-for="(item, index) in options"
             :key="'catalog' + index"
             @click="chooseFav(item, index)"
-            :class="{'layui-this': index === optIndex}"
-          >{{item}}</dd>
+            :class="{ 'layui-this': index === optIndex }"
+          >
+            {{ item }}
+          </dd>
         </dl>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -169,8 +193,8 @@ export default {
     chooseFav (item, index) {
       if (this.optIndex !== index) {
         // 当页面上的limit发生变化之后，调整current数值
-        this.$emit('changeCurrent', Math.floor(this.limit * this.current / this.options[index]))
-        this.$emit('changeLimit', this.options[index])
+        // this.$emit('changeCurrent')
+        this.$emit('changeSize', this.options[index], Math.floor(this.limit * this.current / this.options[index]))
       }
       this.optIndex = index
       this.limit = this.options[this.optIndex]
@@ -212,7 +236,7 @@ export default {
       const result = event.target.value
       let cur = this.current
       if (result > this.total || result < 0) {
-        this.$pop('shake', '请输入正确的页码')
+        this.$pop('请输入正确的页码', 'shake')
       } else {
         cur = result - 1
       }
@@ -249,6 +273,7 @@ export default {
   margin-left: 20px;
   position: relative;
   top: -2px;
+  display: inline-block;
 }
 .imooc-input {
   width: 30px;
@@ -270,7 +295,8 @@ export default {
 .layui-form-select {
   width: 80px;
   position: relative;
-  top: -2.5px;
+  top: -1.5px;
   margin-left: 10px;
+  display: inline-block;
 }
 </style>
