@@ -231,7 +231,7 @@ export default {
 <style lang="scss" scoped>
 .svg {
   position: relative;
-  top: -5px;
+  top: -15px;
 }
 .error {
   color: red;
