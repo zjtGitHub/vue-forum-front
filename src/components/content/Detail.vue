@@ -9,24 +9,17 @@
             <div class="fly-detail-info">
               <!-- <span class="layui-badge">审核中</span> -->
 
-              <span class="layui-badge layui-bg-green fly-detail-column">{{
+              <span class="layui-badge layui-bg-green fly-detail-column">
+                {{
                 page.catalog
-              }}</span>
+                }}
+              </span>
 
-              <span
-                class="layui-badge"
-                style="background-color: #999"
-                v-if="page.isEnd"
-                >未结</span
-              >
+              <span class="layui-badge" style="background-color: #999" v-if="page.isEnd">未结</span>
               <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
 
-              <span class="layui-badge layui-bg-black" v-if="page.isTop"
-                >置顶</span
-              >
-              <span class="layui-badge layui-bg-red" v-if="page.isTop"
-                >精帖</span
-              >
+              <span class="layui-badge layui-bg-black" v-if="page.isTop">置顶</span>
+              <span class="layui-badge layui-bg-red" v-if="page.isTop">精帖</span>
 
               <!-- <div class="fly-admin-box">
                 <span class="layui-btn layui-btn-xs jie-admin" type="del"
@@ -50,13 +43,14 @@
                   >加精</span
                 >
                 <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span>
-              </div> -->
+              </div>-->
               <span class="fly-list-nums">
-                <a href="#comment"
-                  ><i class="iconfont" title="回答">&#xe60c;</i>
-                  {{ page.answer }}</a
-                >
-                <i class="iconfont" title="人气">&#xe60b;</i> {{ page.reads }}
+                <a href="#comment">
+                  <i class="iconfont" title="回答">&#xe60c;</i>
+                  {{ page.answer }}
+                </a>
+                <i class="iconfont" title="人气">&#xe60b;</i>
+                {{ page.reads }}
               </span>
             </div>
             <!-- 帖子信息 作者信息 -->
@@ -71,29 +65,21 @@
               <div class="fly-detail-user">
                 <a class="fly-link">
                   <cite v-if="page.user">{{ page.user.name }}</cite>
-                  <i
-                    class="iconfont icon-renzheng"
-                    v-if="page.user && page.user.isVip !== '0'"
-                  ></i>
+                  <i class="iconfont icon-renzheng" v-if="page.user && page.user.isVip !== '0'"></i>
                   <i
                     class="layui-badge fly-badge-vip"
                     v-if="page.user && page.user.isVip !== '0'"
-                    >VIP{{ page.user.isVip }}</i
-                  >
+                  >VIP{{ page.user.isVip }}</i>
                 </a>
                 <span>{{ page.created | time }}</span>
               </div>
               <div class="detail-hits">
-                <span style="padding-right: 10px; color: #ff7200"
-                  >悬赏：{{ page.fav }}飞吻</span
-                >
+                <span style="padding-right: 10px; color: #ff7200">悬赏：{{ page.fav }}飞吻</span>
               </div>
             </div>
             <div class="layui-btn-container fly-detail-admin">
               <a href class="layui-btn layui-btn-sm jie-admin">编辑</a>
-              <a href class="layui-btn layui-btn-sm jie-admin jie-admin-collect"
-                >收藏</a
-              >
+              <a href class="layui-btn layui-btn-sm jie-admin jie-admin-collect">收藏</a>
             </div>
             <!-- 帖子详情 -->
             <div class="detail-body photos" v-richtext="page.content"></div>
@@ -101,19 +87,12 @@
           <!-- ------------------------------------------------------------------------------------- -->
           <!-- 回复列表 -->
           <div class="fly-panel detail-box" id="flyReply">
-            <fieldset
-              class="layui-elem-field layui-field-title"
-              style="text-align: center"
-            >
+            <fieldset class="layui-elem-field layui-field-title" style="text-align: center">
               <legend>回帖</legend>
             </fieldset>
 
             <ul class="jieda" id="jieda">
-              <li
-                class="jieda-daan"
-                v-for="(item, index) in comments"
-                :key="'commments' + index"
-              >
+              <li class="jieda-daan" v-for="(item, index) in comments" :key="'commments' + index">
                 <div class="detail-about detail-about-reply">
                   <a class="fly-avatar">
                     <img
@@ -123,17 +102,13 @@
                     />
                   </a>
                   <div class="fly-detail-user">
-                    <a href="" class="fly-link">
+                    <a href class="fly-link">
                       <cite v-if="item.cuid">{{ item.cuid.name }}</cite>
-                      <i
-                        class="iconfont icon-renzheng"
-                        v-if="item.cuid && item.cuid.isVip !== '0'"
-                      ></i>
+                      <i class="iconfont icon-renzheng" v-if="item.cuid && item.cuid.isVip !== '0'"></i>
                       <i
                         class="layui-badge fly-badge-vip"
                         v-if="item.cuid && item.cuid.isVip !== '0'"
-                        >VIP{{ item.cuid.isVip }}</i
-                      >
+                      >VIP{{ item.cuid.isVip }}</i>
                     </a>
 
                     <span v-if="item.cuid._id === page.user._id">(楼主)</span>
@@ -141,18 +116,14 @@
                 <span style="color:#5FB878">(管理员)</span>
                 <span style="color:#FF9E3F">（社区之光）</span>
                 <span style="color:#999">（该号已被封）</span>
-                -->
+                    -->
                   </div>
 
                   <div class="detail-hits">
                     <span>{{ item.created | moment }}</span>
                   </div>
 
-                  <i
-                    class="iconfont icon-caina"
-                    v-if="item.isBest === '1'"
-                    title="最佳答案"
-                  ></i>
+                  <i class="iconfont icon-caina" v-if="item.isBest === '1'" title="最佳答案"></i>
                 </div>
                 <!-- 评论内容 -->
                 <div class="detail-body jieda-body photos">
@@ -160,6 +131,7 @@
                 </div>
                 <div class="jieda-reply">
                   <span
+                    @click="setHands(item)"
                     class="jieda-zan"
                     :class="{ zanok: item.handed === '1' }"
                     type="zan"
@@ -175,15 +147,13 @@
                     <span
                       v-if="!page.isEnd && item.cuid._id === user._id"
                       @click="editReply(item)"
-                      >编辑</span
-                    >
+                    >编辑</span>
                     <span type="del">删除</span>
                     <span
                       v-if="!page.isEnd && page.user._id === user._id"
                       @click="setBest(item)"
                       class="jieda-accept"
-                      >采纳</span
-                    >
+                    >采纳</span>
                   </div>
                 </div>
               </li>
@@ -206,10 +176,7 @@
             <div class="layui-form layui-form-pane">
               <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(onSubmit)">
-                  <my-Editor
-                    @changeContent="addContent"
-                    :initContent="editInfo.content"
-                  ></my-Editor>
+                  <my-Editor @changeContent="addContent" :initContent="editInfo.content"></my-Editor>
                   <validation-provider
                     rules="required|length:4"
                     ref="codefield"
@@ -218,9 +185,7 @@
                   >
                     <div class="layui-form-item">
                       <div class="layui-row">
-                        <label for="L_vercode" class="layui-form-label"
-                          >验证码</label
-                        >
+                        <label for="L_vercode" class="layui-form-label">验证码</label>
                         <div class="layui-input-inline">
                           <input
                             v-model="code"
@@ -232,10 +197,7 @@
                             class="layui-input"
                           />
                         </div>
-                        <div
-                          class="layui-form-mid"
-                          style="padding: 0 !important"
-                        >
+                        <div class="layui-form-mid" style="padding: 0 !important">
                           <span
                             class="svg"
                             style="color: #c00; position: relative; top: -7px"
@@ -244,9 +206,7 @@
                           />
                         </div>
                       </div>
-                      <div class="error layui-form-mid">
-                        {{ errors[0] }}
-                      </div>
+                      <div class="error layui-form-mid">{{ errors[0] }}</div>
                     </div>
                   </validation-provider>
                   <div class="layui-form-item">
@@ -278,7 +238,7 @@ import Editor from '../modules/editer/index'
 import Pagination from '../modules/pagination/Page'
 import CodeMix from '@/mixin/code'
 import { getDetail } from '@/api/content'
-import { getCommentList, addComment, editComment, setBest } from '@/api/comments'
+import { getCommentList, addComment, editComment, setBest, setHands } from '@/api/comments'
 import { scrollToElem } from '@/utils/common'
 export default {
   name: 'Detail',
@@ -323,6 +283,16 @@ export default {
     }
   },
   methods: {
+    setHands (item) {
+      setHands({ cid: item._id }).then(res => {
+        if (res.code === 200) {
+          this.$pop('点赞成功')
+          item.handed = '1'
+        } else {
+          this.$pop(res.msg, 'shake')
+        }
+      })
+    },
     // 提交回复
     async onSubmit () {
       if (this.editInfo.content.trim() === '') {
@@ -434,7 +404,7 @@ export default {
         }
       }).catch((err) => {
         console.log(err)
-        this.$router.push('/404')
+        // this.$router.push('/404')
       })
     },
     handleChangeSize (val, current) {
