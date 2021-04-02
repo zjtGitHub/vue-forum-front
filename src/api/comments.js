@@ -3,11 +3,16 @@ import qs from 'qs'
 import store from '@/store'
 // 获取评论列表
 const getCommentList = (params) => {
-  return axios.get('/public/comment?' + qs.stringify(params), {
-    headers: {
-      Authorization: 'Bearer ' + store.state.token
+  const token = store.state.token
+  let headers = {}
+  if (token !== '') {
+    headers = {
+      headers: {
+        Authorization: 'Bearer ' + store.state.token
+      }
     }
-  })
+  }
+  return axios.get('/public/comment?' + qs.stringify(params), headers)
 }
 
 // 添加评论

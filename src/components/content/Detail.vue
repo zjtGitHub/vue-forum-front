@@ -78,7 +78,10 @@
               </div>
             </div>
             <div class="layui-btn-container fly-detail-admin">
-              <a href class="layui-btn layui-btn-sm jie-admin">编辑</a>
+              <router-link
+                :to="{name: 'edit',params: {tid: tid,page: page}}"
+                class="layui-btn layui-btn-sm jie-admin"
+              >编辑</router-link>
               <a href class="layui-btn layui-btn-sm jie-admin jie-admin-collect">收藏</a>
             </div>
             <!-- 帖子详情 -->
@@ -139,7 +142,7 @@
                     <i class="iconfont icon-zan"></i>
                     <em>{{ item.hands }}</em>
                   </span>
-                  <span type="reply">
+                  <span type="reply" @click="reply(item)">
                     <i class="iconfont icon-svgmoban53"></i>
                     回复
                   </span>
@@ -283,15 +286,40 @@ export default {
     }
   },
   methods: {
-    setHands (item) {
-      setHands({ cid: item._id }).then(res => {
-        if (res.code === 200) {
-          this.$pop('点赞成功')
-          item.handed = '1'
+    // 评论回复
+    reply (item) {
+      console.log('🚀 ~ file: Detail.vue ~ line 288 ~ reply ~ item', item)
+      const reg = /^@[\S]+/g
+      // 判断评论框是否为空，为空直接@名字，不为空判断是否已经@了是的话替换@的名字，没有在内容前加上@
+      if (this.editInfo.content) {
+        if (reg.test(this.editInfo.content)) {
+          console.log(555)
+          this.editInfo.content = this.editInfo.content.replace(reg, `@${item.cuid.name}`)
         } else {
-          this.$pop(res.msg, 'shake')
+          this.editInfo.content = `@${item.cuid.name} ${this.editInfo.content}`
         }
-      })
+      } else {
+        this.editInfo.content = `@${item.cuid.name} `
+      }
+
+      // 动态滚动到编辑器位置并focus
+      scrollToElem('.layui-input-block', 500, -65)
+      document.getElementById('edit').focus()
+    },
+    setHands (item) {
+      if (item.handed === '1') {
+        this.$pop('您已经赞过了', 'shake')
+      } else {
+        setHands({ cid: item._id }).then(res => {
+          if (res.code === 200) {
+            this.$pop('点赞成功')
+            item.handed = '1'
+            item.hands += 1
+          } else {
+            this.$pop(res.msg, 'shake')
+          }
+        })
+      }
     },
     // 提交回复
     async onSubmit () {
