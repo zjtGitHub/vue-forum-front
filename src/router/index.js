@@ -24,6 +24,7 @@ const BindAccount = () => import(/* webpackChunkName: 'BindAccount' */ '../compo
 const MyPost = () => import(/* webpackChunkName: 'mypost' */ '@/components/user/common/MyPost.vue')
 const MyCollection = () => import(/* webpackChunkName: 'mycollection' */ '@/components/user/common/MyCollection.vue')
 const Add = () => import(/* webpackChunkName: 'add' */ '@/components/content/Add.vue')
+const Edit = () => import(/* webpackChunkName: 'edit' */ '@/components/content/Edit.vue')
 const Detail = () => import(/* webpackChunkName: 'detail' */ '@/components/content/Detail.vue')
 const NotFound = () => import(/* webpackChunkName: 'NotFound' */ '../views/404.vue')
 const Confirm = () => import(/* webpackChunkName: 'Confirm' */ '../views/Confirm.vue')
@@ -86,7 +87,15 @@ const routes = [
     component: Add
   },
   {
-    path: '/detail',
+    path: '/edit/:tid',
+    props: true,
+    name: 'edit',
+    meta: { requiresAuth: true },
+    component: Edit
+  },
+  {
+    path: '/detail/:tid',
+    props: true,
     name: 'detail',
     component: Detail
   },
@@ -184,7 +193,6 @@ router.beforeEach((to, from, next) => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if (token !== '' && token !== null) {
     const payload = jwt.decode(token)
-    console.log(moment().isBefore(moment(payload.exp * 1000)))
     if (moment().isBefore(moment(payload.exp * 1000))) {
       // 如果缓存中存在token并且没过期 直接登录
       store.commit('setToken', token)

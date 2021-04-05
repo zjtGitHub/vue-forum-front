@@ -1,7 +1,7 @@
 <template>
   <div v-show="isShow">
     <div class="alert">
-      <div class="flex">{{msg}}</div>
+      <div class="flex">{{ msg }}</div>
       <div v-if="type === 'alert'">
         <div class="btnCommon success" @click="close">确定</div>
       </div>
@@ -59,7 +59,7 @@ export default {
 <style lang="scss" scoped>
 $btn-main: #009688;
 $btn-dark: darken($btn-main, 5%);
-
+$btn-dark1: darken(#ededed, 5%);
 .alert {
   width: 300px;
   height: 150px;
@@ -110,6 +110,10 @@ $btn-dark: darken($btn-main, 5%);
   &.cancel {
     background: #ededed;
     color: #333;
+    &:hover {
+      background: $btn-dark1;
+      cursor: pointer;
+    }
   }
 }
 
@@ -123,5 +127,4 @@ $btn-dark: darken($btn-main, 5%);
   overflow: hidden;
   z-index: 2000;
 }
-
 </style>

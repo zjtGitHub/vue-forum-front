@@ -30,30 +30,38 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "assets/css/global.css";
-  @import "assets/css/layui-layer/layer.css";
-  @for $i from 0 to 5 {
-    .pd#{$i} {
-      padding: $i * 10 + px!important;
-    }
-    .pl#{$i} {
-      padding-left: $i * 10 + px!important;
-    }
-    .pr#{$i} {
-      padding-right: $i * 10 + px!important;
-    }
-    .mr#{$i} {
-      margin-right: $i * 10 + px!important;
-    }
+@import "assets/css/global.css";
+@import "assets/css/layui-layer/layer.css";
+@for $i from 0 to 5 {
+  .pd#{$i} {
+    padding: $i * 10 + px !important;
   }
+  .pl#{$i} {
+    padding-left: $i * 10 + px !important;
+  }
+  .pr#{$i} {
+    padding-right: $i * 10 + px !important;
+  }
+  .mr#{$i} {
+    margin-right: $i * 10 + px !important;
+  }
+}
 
-  .gray {
-    color: #999;
-  }
-  .orange {
-    color: #ff5722;
-  }
-  .pull-right {
-    float: right!important;
-  }
+.gray {
+  color: #999;
+}
+.orange {
+  color: #ff5722;
+}
+.pull-right {
+  float: right !important;
+}
+.d-hide {
+  position: absolute;
+  overflow: hidden;
+  height: 50%;
+}
+.error {
+  color: red;
+}
 </style>

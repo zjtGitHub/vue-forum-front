@@ -27,10 +27,29 @@ const getUserInfo = () => axios.get('/user/getUserInfo')
 // 修改密码
 const updatePassword = (data) => axios.post('/user/updatePassword', data)
 
+// 设置收藏 & 取消收藏
+const addCollect = (data) => axios.get('/user/setCollect?' + qs.stringify(data))
+
+// 获取收藏列表
+const getCollect = (data) => axios.get('/user/collect?' + qs.stringify(data))
+
+// 获取发表的文章列表
+const getPostListByUid = (data) => axios.get('/user/post?' + qs.stringify(data))
+
+// 获取用户最近的发表文章列表
+const getPostPublic = (data) => axios.get('/public/latestPost?' + qs.stringify(data))
+
+// 删除指定文章列表
+const deletePostByUid = (data) => axios.get('/user/deletePost?' + qs.stringify(data))
 export {
   signIn,
   updateUserInfo,
   updateUsername,
   getUserInfo,
-  updatePassword
+  updatePassword,
+  addCollect,
+  getCollect,
+  getPostListByUid,
+  getPostPublic,
+  deletePostByUid
 }

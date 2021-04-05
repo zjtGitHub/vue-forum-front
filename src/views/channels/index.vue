@@ -1,19 +1,19 @@
 <template>
-    <div class="layui-container">
-      <div class="layui-row layui-col-space15">
-        <div class="layui-col-md8">
-          <my-top></my-top>
-          <my-list></my-list>
-        </div>
-        <div class="layui-col-md4">
-          <my-tips></my-tips>
-          <my-sign></my-sign>
-          <my-hotlist></my-hotlist>
-          <my-ads></my-ads>
-          <my-links></my-links>
-        </div>
+  <div class="layui-container">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md8">
+        <my-top></my-top>
+        <my-list></my-list>
+      </div>
+      <div class="layui-col-md4">
+        <my-tips></my-tips>
+        <my-sign></my-sign>
+        <my-hotlist></my-hotlist>
+        <my-ads></my-ads>
+        <my-links></my-links>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -39,5 +39,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -1,41 +1,55 @@
 <template>
   <div>
     <ul class="fly-list">
-      <li v-for="(item, index) in listItem" :key="'item'+ index">
+      <li v-for="(item, index) in listItem" :key="'item' + index">
         <a class="fly-avatar">
-          <img
-            :src="item.uid.pic"
-            alt="头像"
-          />
+          <img :src="item.uid.pic" alt="头像" />
         </a>
         <h2>
           <a class="layui-badge">{{ catalog }}</a>
-          <a>{{ item.title }}</a>
+          <a @click.prevent="toDetail(item)" class="pointer">{{
+            item.title
+          }}</a>
         </h2>
         <div class="fly-list-info">
-          <a>
+          <span>
             <cite>{{ item.uid.id }}</cite>
             <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-            <i class="layui-badge fly-badge-vip">{{ 'VIP' + item.uid.isVip }}</i>
-          </a>
+            <i class="layui-badge fly-badge-vip">{{
+              "VIP" + item.uid.isVip
+            }}</i>
+          </span>
           <span>{{ item.created | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻">
-              <i class="iconfont icon-kiss"></i>{{ item.fav }}
-            </span>
-            <span class="layui-badge fly-badge-accept layui-hide-xs" v-show="item.status === '1'">已结</span>
+            <i class="iconfont icon-kiss"></i>{{ item.fav }}
+          </span>
+          <span
+            class="layui-badge fly-badge-accept layui-hide-xs"
+            v-show="item.status === '1'"
+            >已结</span
+          >
           <span class="fly-list-nums">
-              <i class="iconfont icon-pinglun1" title="回答"></i> {{ item.answer }}
-            </span>
+            <i class="iconfont icon-pinglun1" title="回答"></i>
+            {{ item.answer }}
+          </span>
         </div>
-        <div class="fly-list-badge" v-show="item.tags.length > 0 && item.tags[0].name !== ''">
-          <span class="layui-badge layui-bg-red" v-for="(tag, index) in item.tags" :key="'tag'+ index">{{ tag.name }}</span>
+        <div
+          class="fly-list-badge"
+          v-show="item.tags.length > 0 && item.tags[0].name !== ''"
+        >
+          <span
+            class="layui-badge layui-bg-red"
+            v-for="(tag, index) in item.tags"
+            :key="'tag' + index"
+            >{{ tag.name }}</span
+          >
         </div>
       </li>
     </ul>
     <div style="text-align: center" v-show="isShow">
       <div class="laypage-main" v-if="!isEnd">
-        <a class="laypage-next" @click.prevent="more">更多求解</a>
+        <a class="laypage-next pointer" @click.prevent="more">更多求解</a>
       </div>
       <div class="nomore gray" v-else>没有更多了</div>
     </div>
@@ -43,11 +57,6 @@
 </template>
 
 <script>
-import moment from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import relativeTime from 'dayjs/plugin/relativeTime'
-moment.locale('zh-cn')
-moment.extend(relativeTime)
 export default {
   name: 'ListItem',
   props: {
@@ -91,15 +100,9 @@ export default {
   methods: {
     more () {
       this.$emit('nextPage')
-    }
-  },
-  filters: {
-    moment (date) {
-      if (!moment(date).isBefore(moment().subtract(7, 'day'))) {
-        return moment(date).fromNow()
-      } else {
-        return moment(date).format('YYYY-MM-DD')
-      }
+    },
+    toDetail (item) {
+      this.$router.push(`/detail/${item._id}`)
     }
   }
 }
@@ -110,7 +113,7 @@ export default {
   font-size: 16px;
   padding: 30px 0;
 }
-.laypage-next {
+.pointer {
   cursor: pointer;
 }
 </style>

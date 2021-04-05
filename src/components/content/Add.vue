@@ -1,5 +1,5 @@
 <template>
-  <div class="layui-container fly-marginTop">
+  <div class="layui-container fly-marginTop" :class="{ 'd-hide': isHide }">
     <div class="fly-panel" pad20 style="padding-top: 5px">
       <!--<div class="fly-none">没有权限</div>-->
       <div class="layui-form layui-form-pane">
@@ -87,7 +87,10 @@
                       </validation-provider>
                     </div>
                   </div>
-                  <editor @changeContent="changeContent" :initContent="content"></editor>
+                  <editor
+                    @changeContent="changeContent"
+                    :initContent="content"
+                  ></editor>
                   <div class="layui-form-item">
                     <div class="layui-inline">
                       <label class="layui-form-label">悬赏飞吻</label>
@@ -216,6 +219,11 @@ export default {
       favList: [20, 30, 50, 60, 80],
       content: '',
       title: ''
+    }
+  },
+  computed: {
+    isHide () {
+      return this.$store.state.isHide
     }
   },
   mounted () {

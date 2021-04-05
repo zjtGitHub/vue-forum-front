@@ -23,10 +23,10 @@
             <a class="iconfont icon-touxiang layui-hide-xs"></a>
           </li>
           <li class="layui-nav-item">
-            <router-link :to="{name: 'login'}">登入</router-link>
+            <router-link :to="{ name: 'login' }">登入</router-link>
           </li>
           <li class="layui-nav-item">
-            <router-link :to="{name: 'reg'}">注册</router-link>
+            <router-link :to="{ name: 'reg' }">注册</router-link>
           </li>
           <li class="layui-nav-item layui-hide-xs">
             <a
@@ -48,18 +48,24 @@
 
         <template v-else>
           <!-- 登入后的状态 -->
-          <li class="layui-nav-item" v-if="isLogin" @mouseover="show()" @mouseleave="hide()">
-            <a class="fly-nav-avatar" href="javascript:;" >
+          <li
+            class="layui-nav-item"
+            v-if="isLogin"
+            @mouseover="show()"
+            @mouseleave="hide()"
+          >
+            <a class="fly-nav-avatar" href="javascript:;">
               <cite class="layui-hide-xs">{{ userInfo.name }}</cite>
               <i
                 class="layui-badge fly-badge-vip layui-hide-xs"
                 v-show="userInfo.isVip !== '0'"
-              >{{ 'VIP' + userInfo.isVip }}</i>
+                >{{ "VIP" + userInfo.isVip }}</i
+              >
               <img :src="userInfo.pic" />
             </a>
             <dl
               class="layui-nav-child layui-anim layui-anim-scaleSpring"
-              :class="{'layui-show': isHover}"
+              :class="{ 'layui-show': isHover }"
             >
               <dd>
                 <router-link :to="{ name: 'center' }">
@@ -68,17 +74,26 @@
               </dd>
               <dd>
                 <router-link :to="{ name: 'center' }">
-                  <i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息
+                  <i class="iconfont icon-tongzhi" style="top: 4px"></i>我的消息
                 </router-link>
               </dd>
               <dd>
                 <router-link :to="{ name: 'center' }">
-                  <i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页
+                  <i
+                    class="layui-icon"
+                    style="margin-left: 2px; font-size: 22px"
+                    >&#xe68e;</i
+                  >我的主页
                 </router-link>
               </dd>
-              <hr style="margin: 5px 0;" />
+              <hr style="margin: 5px 0" />
               <dd>
-                <a href="javascript:;" @click="logout" style="text-align: center;">退出</a>
+                <a
+                  href="javascript:;"
+                  @click="logout"
+                  style="text-align: center"
+                  >退出</a
+                >
               </dd>
             </dl>
           </li>
@@ -107,14 +122,12 @@ export default {
   },
   methods: {
     show () {
-      console.log('show')
       clearTimeout(this.hoverCtrl)
       this.hoverCtrl = setTimeout(() => {
         this.isHover = true
       }, 200)
     },
     hide () {
-      console.log('hide')
       clearTimeout(this.hoverCtrl)
       this.hoverCtrl = setTimeout(() => {
         this.isHover = false
