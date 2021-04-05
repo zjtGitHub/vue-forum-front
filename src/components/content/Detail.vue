@@ -79,10 +79,15 @@
             </div>
             <div class="layui-btn-container fly-detail-admin">
               <router-link
+                v-if="!page.isEnd"
                 :to="{name: 'edit',params: {tid: tid,page: page}}"
                 class="layui-btn layui-btn-sm jie-admin"
               >编辑</router-link>
-              <a href class="layui-btn layui-btn-sm jie-admin jie-admin-collect">收藏</a>
+              <a
+              class="layui-btn layui-btn-sm jie-admin-collect"
+              :class="{'layui-btn-primary': page.isFav}"
+              @click.prevent="setCollect()"
+            >{{page.isFav ? '取消收藏': '收藏'}}</a>
             </div>
             <!-- 帖子详情 -->
             <div class="detail-body photos" v-richtext="page.content"></div>
@@ -240,6 +245,7 @@ import Panel from '@/components/Panel'
 import Editor from '../modules/editer/index'
 import Pagination from '../modules/pagination/Page'
 import CodeMix from '@/mixin/code'
+import { addCollect } from '@/api/User'
 import { getDetail } from '@/api/content'
 import { getCommentList, addComment, editComment, setBest, setHands } from '@/api/comments'
 import { scrollToElem } from '@/utils/common'
@@ -319,6 +325,25 @@ export default {
             this.$pop(res.msg, 'shake')
           }
         })
+      }
+    },
+    setCollect () {
+      // 设置收藏 & 取消收藏
+      const isLogin = this.$store.state.isLogin
+      if (isLogin) {
+        const collect = {
+          tid: this.tid,
+          title: this.page.title,
+          isFav: this.page.isFav ? 1 : 0
+        }
+        addCollect(collect).then((res) => {
+          if (res.code === 200) {
+            this.page.isFav = !this.page.isFav
+            this.$pop(this.page.isFav ? '设置收藏成功' : '取消收藏成功')
+          }
+        })
+      } else {
+        this.$pop('请先登录后再进行收藏！', 'shake')
       }
     },
     // 提交回复
@@ -429,6 +454,7 @@ export default {
       getDetail(this.tid).then((res) => {
         if (res.code === 200) {
           this.page = res.data
+          console.log(this.page)
         }
       }).catch((err) => {
         console.log(err)

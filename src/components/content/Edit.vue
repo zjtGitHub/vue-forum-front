@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { addPost } from '@/api/content'
+import { editPost } from '@/api/content'
 import Editor from '../modules/editer/index'
 import CodeMix from '@/mixin/code'
 export default {
@@ -202,16 +202,15 @@ export default {
         this.$alert('文章内容不得为空!')
         return
       }
-      addPost({
+      editPost({
+        tid: this.tid,
         title: this.title,
-        catalog: this.catalogs[this.cataIndex].value,
         content: this.content,
-        fav: this.favList[this.favIndex],
         code: this.code,
         sid: this.$store.state.sid
       }).then((res) => {
         if (res.code === 200) {
-          this.$alert('帖子发表成功!')
+          this.$alert('帖子编辑成功!')
           localStorage.setItem('editData', '')
           setTimeout(() => {
             this.$router.push('/')
