@@ -54,16 +54,77 @@
           </tr>
         </tbody>
       </table>
+      <my-pagination
+        v-show="total > 0"
+        :total="total"
+        :current="current"
+        :align="'left'"
+        :hasTotal="true"
+        :hasSelect="true"
+        @changeCurrent="handleChange"
+    ></my-pagination>
     </div>
 
   </div>
 </template>
 
 <script>
+import { getPostListByUid, deletePostByUid } from '@/api/User'
+import Pagination from '@/components/modules/pagination/Page'
 export default {
   name: 'MyPost',
   data () {
-    return {}
+    return {
+      list: [],
+      total: 0,
+      current: 0,
+      page: 0,
+      limit: 10
+    }
+  },
+  components: {
+    'my-pagination': Pagination
+  },
+  mounted () {
+    this.getList()
+  },
+  methods: {
+    getList () {
+      getPostListByUid({
+        page: this.current,
+        limit: this.limit
+      }).then(res => {
+        if (res.code === 200) {
+          this.list = res.data
+          this.total = res.total
+        }
+      })
+    },
+    deletePost (item) {
+      this.$confirm('确定删除吗?', () => {
+        if (item.isEnd !== '0') {
+          this.$pop('帖子已结贴，无法删除！', 'shake')
+          return
+        }
+        deletePostByUid({
+          tid: item._id
+        }).then((res) => {
+          if (res.code === 200) {
+            this.$pop('', '删除成功！')
+            this.list.splice(this.list.indexOf(item), 1)
+          } else {
+            this.$pop(res.msg, 'shake')
+          }
+        })
+      }, () => {
+
+      })
+    },
+    handleChange (val) {
+      this.current = val
+      this.getCollectList()
+    }
+
   }
 }
 </script>

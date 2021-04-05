@@ -32,6 +32,15 @@ const addCollect = (data) => axios.get('/user/setCollect?' + qs.stringify(data))
 
 // 获取收藏列表
 const getCollect = (data) => axios.get('/user/collect?' + qs.stringify(data))
+
+// 获取发表的文章列表
+const getPostListByUid = (data) => axios.get('/user/post?' + qs.stringify(data))
+
+// 获取用户最近的发表文章列表
+const getPostPublic = (data) => axios.get('/public/latestPost?' + qs.stringify(data))
+
+// 删除指定文章列表
+const deletePostByUid = (data) => axios.get('/user/deletePost?' + qs.stringify(data))
 export {
   signIn,
   updateUserInfo,
@@ -39,5 +48,8 @@ export {
   getUserInfo,
   updatePassword,
   addCollect,
-  getCollect
+  getCollect,
+  getPostListByUid,
+  getPostPublic,
+  deletePostByUid
 }
