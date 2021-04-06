@@ -38,6 +38,9 @@ export default new Vuex.Store({
       state.isHide = value
     }
   },
+  getters: {
+    uid: (state) => state.userInfo ? state.userInfo._id : ''
+  },
   actions: {},
   modules: {}
 })

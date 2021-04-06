@@ -84,10 +84,10 @@
                 class="layui-btn layui-btn-sm jie-admin"
               >编辑</router-link>
               <a
-              class="layui-btn layui-btn-sm jie-admin-collect"
-              :class="{'layui-btn-primary': page.isFav}"
-              @click.prevent="setCollect()"
-            >{{page.isFav ? '取消收藏': '收藏'}}</a>
+                class="layui-btn layui-btn-sm jie-admin-collect"
+                :class="{'layui-btn-primary': page.isFav}"
+                @click.prevent="setCollect()"
+              >{{page.isFav ? '取消收藏': '收藏'}}</a>
             </div>
             <!-- 帖子详情 -->
             <div class="detail-body photos" v-richtext="page.content"></div>
@@ -110,14 +110,14 @@
                     />
                   </a>
                   <div class="fly-detail-user">
-                    <a href class="fly-link">
+                    <router-link :to="{name: 'home', params: {uid: item.cuid._id}}" link>
                       <cite v-if="item.cuid">{{ item.cuid.name }}</cite>
                       <i class="iconfont icon-renzheng" v-if="item.cuid && item.cuid.isVip !== '0'"></i>
                       <i
                         class="layui-badge fly-badge-vip"
                         v-if="item.cuid && item.cuid.isVip !== '0'"
                       >VIP{{ item.cuid.isVip }}</i>
-                    </a>
+                    </router-link>
 
                     <span v-if="item.cuid._id === page.user._id">(楼主)</span>
                     <!--

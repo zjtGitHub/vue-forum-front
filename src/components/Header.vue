@@ -48,21 +48,15 @@
 
         <template v-else>
           <!-- 登入后的状态 -->
-          <li
-            class="layui-nav-item"
-            v-if="isLogin"
-            @mouseover="show()"
-            @mouseleave="hide()"
-          >
-            <a class="fly-nav-avatar" href="javascript:;">
+          <li class="layui-nav-item" v-if="isLogin" @mouseover="show()" @mouseleave="hide()">
+            <router-link class="fly-nav-avatar" :to="{name: 'center'}">
               <cite class="layui-hide-xs">{{ userInfo.name }}</cite>
               <i
                 class="layui-badge fly-badge-vip layui-hide-xs"
                 v-show="userInfo.isVip !== '0'"
-                >{{ "VIP" + userInfo.isVip }}</i
-              >
+              >{{ "VIP" + userInfo.isVip }}</i>
               <img :src="userInfo.pic" />
-            </a>
+            </router-link>
             <dl
               class="layui-nav-child layui-anim layui-anim-scaleSpring"
               :class="{ 'layui-show': isHover }"
@@ -73,27 +67,18 @@
                 </router-link>
               </dd>
               <dd>
-                <router-link :to="{ name: 'center' }">
+                <router-link :to="{ name: 'msg' }">
                   <i class="iconfont icon-tongzhi" style="top: 4px"></i>我的消息
                 </router-link>
               </dd>
               <dd>
-                <router-link :to="{ name: 'center' }">
-                  <i
-                    class="layui-icon"
-                    style="margin-left: 2px; font-size: 22px"
-                    >&#xe68e;</i
-                  >我的主页
+                <router-link :to="{ name: 'home',params: {uid} }">
+                  <i class="layui-icon" style="margin-left: 2px; font-size: 22px">&#xe68e;</i>我的主页
                 </router-link>
               </dd>
               <hr style="margin: 5px 0" />
               <dd>
-                <a
-                  href="javascript:;"
-                  @click="logout"
-                  style="text-align: center"
-                  >退出</a
-                >
+                <a href="javascript:;" @click="logout" style="text-align: center">退出</a>
               </dd>
             </dl>
           </li>
@@ -104,6 +89,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Header',
   data () {
@@ -113,6 +99,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['uid']),
     userInfo () {
       return this.$store.state.userInfo
     },

@@ -7,43 +7,40 @@
         </a>
         <h2>
           <a class="layui-badge">{{ catalog }}</a>
-          <a @click.prevent="toDetail(item)" class="pointer">{{
+          <a @click.prevent="toDetail(item)" class="pointer">
+            {{
             item.title
-          }}</a>
+            }}
+          </a>
         </h2>
         <div class="fly-list-info">
-          <span>
+          <router-link :to="{name: 'home', params: {uid: item.uid._id}}">
             <cite>{{ item.uid.id }}</cite>
             <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-            <i class="layui-badge fly-badge-vip">{{
+            <i class="layui-badge fly-badge-vip">
+              {{
               "VIP" + item.uid.isVip
-            }}</i>
-          </span>
+              }}
+            </i>
+          </router-link>
           <span>{{ item.created | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻">
-            <i class="iconfont icon-kiss"></i>{{ item.fav }}
+            <i class="iconfont icon-kiss"></i>
+            {{ item.fav }}
           </span>
-          <span
-            class="layui-badge fly-badge-accept layui-hide-xs"
-            v-show="item.status === '1'"
-            >已结</span
-          >
+          <span class="layui-badge fly-badge-accept layui-hide-xs" v-show="item.status === '1'">已结</span>
           <span class="fly-list-nums">
             <i class="iconfont icon-pinglun1" title="回答"></i>
             {{ item.answer }}
           </span>
         </div>
-        <div
-          class="fly-list-badge"
-          v-show="item.tags.length > 0 && item.tags[0].name !== ''"
-        >
+        <div class="fly-list-badge" v-show="item.tags.length > 0 && item.tags[0].name !== ''">
           <span
             class="layui-badge layui-bg-red"
             v-for="(tag, index) in item.tags"
             :key="'tag' + index"
-            >{{ tag.name }}</span
-          >
+          >{{ tag.name }}</span>
         </div>
       </li>
     </ul>

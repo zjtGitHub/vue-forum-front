@@ -25,9 +25,11 @@
       <!-- 已签到状态 -->
       <template v-else>
         <button class="layui-btn layui-btn-disabled">今日已签到 倒计时：{{ countDown }}</button>
-        <span>获得了<cite>{{ score }}</cite>飞吻</span>
+        <span>
+          获得了
+          <cite>{{ score }}</cite>飞吻
+        </span>
       </template>
-
     </div>
     <sign-info :isShow="isShow" @closeModal="close"></sign-info>
     <sign-list :isShow="showList" @closeModal="close"></sign-list>
@@ -105,9 +107,20 @@ export default {
       if (n) {
         this.signCountdown()
       }
+    },
+    userInfo (newval, oldval) {
+      if (newval.isSign === true) {
+        this.nextSign()
+        this.isSign = true
+      } else {
+        this.isSign = false
+      }
     }
   },
   methods: {
+    userInfo () {
+      return this.$store.state.userInfo
+    },
     showInfo () {
       this.isShow = true
     },
@@ -164,15 +177,15 @@ export default {
 @keyframes bounceIn {
   0% {
     opacity: 0;
-    transform: scale(0.5)
+    transform: scale(0.5);
   }
   100% {
     opacity: 1;
-    transform: scale(1)
+    transform: scale(1);
   }
 }
 .mask {
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   z-index: 20000;
   position: fixed;
   top: 0;

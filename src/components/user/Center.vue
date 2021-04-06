@@ -6,8 +6,14 @@
         <div class="panel border">
           <div class="title">我的会员信息</div>
           <div class="content">
-            <p>积分经验值为: <em style="color: #FF5722">60</em></p>
-            <p>您当前为: <em style="color: #FF5722">60</em></p>
+            <p>
+              积分经验值为:
+              <cite>{{userInfo.favs}}</cite>
+            </p>
+            <p>
+              您当前为:
+              <cite>{{userInfo.isVip === '0'? '非VIP' : 'VIP' + userInfo.isVip }}</cite>
+            </p>
           </div>
         </div>
       </div>
@@ -17,79 +23,17 @@
       <div class="layui-col-md12 mt20">
         <div class="panel border">
           <div class="title">快捷方式</div>
-          <div class="content" style="height: auto">
+          <div class="content" style="height: auto;">
             <ul class="layui-row layui-col-space10">
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-set shortcut"></div>
-                  <span class="label">修改信息</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-face-smile shortcut"></div>
-                  <span class="label">修改头像</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-password shortcut"></div>
-                  <span class="label">修改密码</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-auz shortcut"></div>
-                  <span class="label">账号绑定</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-add-circle shortcut"></div>
-                  <span class="label">发表新帖</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-share shortcut"></div>
-                  <span class="label">查看分享</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-username shortcut"></div>
-                  <span class="label">我的帖子</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-rate-solid shortcut"></div>
-                  <span class="label">我的收藏</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-template-1 shortcut"></div>
-                  <span class="label">其他资料</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-login-wechat shortcut"></div>
-                  <span class="label">关注公众号</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-read shortcut"></div>
-                  <span class="label">文档</span>
-                </a>
-              </li>
-              <li class="layui-col-sm3 layui-col-xs4">
-                <a href="">
-                  <div class="layui-icon layui-icon-app shortcut"></div>
-                  <span class="label">后台管理</span>
-                </a>
+              <li
+                class="layui-col-sm3 layui-col-xs4"
+                v-for="(item,index) in lists"
+                :key="'user-center' + index"
+              >
+                <router-link :to="{name: item.route}">
+                  <div class="layui-icon shortcut" :class="item.icon"></div>
+                  <span>{{item.name}}</span>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -100,20 +44,104 @@
 </template>
 
 <script>
+import { getInfo } from '@/api/User'
 import Sign from '@/components/sidebar/Sign.vue'
 export default {
   name: 'user-center',
+  data () {
+    return {
+      lists: [
+        {
+          name: '修改信息',
+          route: 'info',
+          icon: 'layui-icon-set'
+        },
+        {
+          name: '修改头像',
+          route: 'pic',
+          icon: 'layui-icon-face-smile'
+        },
+        {
+          name: '修改密码',
+          route: 'passwd',
+          icon: 'layui-icon-password'
+        },
+        {
+          name: '账号绑定',
+          route: 'account',
+          icon: 'layui-icon-app'
+        },
+        {
+          name: '发表新贴',
+          route: '',
+          icon: 'layui-icon-add-circle'
+        },
+        {
+          name: '查看分享',
+          route: '',
+          icon: 'layui-icon-share'
+        },
+        {
+          name: '我的帖子',
+          route: 'mypost',
+          icon: 'layui-icon-username'
+        },
+        {
+          name: '我的收藏',
+          route: 'mycollection',
+          icon: 'layui-icon-rate-solid'
+        },
+        {
+          name: '其他资料',
+          route: '',
+          icon: 'layui-icon-template-1'
+        },
+        {
+          name: '关注公众号',
+          route: '',
+          icon: 'layui-icon-login-wechat'
+        },
+        {
+          name: '文档',
+          route: '',
+          icon: 'layui-icon-read'
+        },
+        {
+          name: '后台管理',
+          route: '',
+          icon: 'layui-icon-user'
+        }
+      ]
+    }
+  },
   components: {
     Sign
+  },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
+    }
+  },
+  mounted () {
+    this.getUserInfo()
+  },
+  methods: {
+    getUserInfo () {
+      getInfo({ uid: this.userInfo._id }).then((res) => {
+        if (res.code === 200) {
+          this.$store.commit('setUserInfo', res.data)
+        }
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .panel {
     &.main {
-      margin: 0!important;
+      margin: 0 !important;
     }
   }
 }
@@ -123,7 +151,7 @@ export default {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: all 0.2s;
   &.main {
-      margin: 0 0 10px 225px;
+    margin: 0 0 10px 225px;
   }
 }
 

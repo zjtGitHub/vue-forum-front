@@ -2,16 +2,11 @@
   <div class="fly-panel fly-column">
     <div class="layui-container">
       <ul class="layui-clear">
-        <router-link tag="li" to="/" class="layui-hide-xs"
-          ><a>首页</a></router-link
-        >
-        <router-link
-          v-for="(item, index) in list"
-          :key="'panel' + index"
-          tag="li"
-          :to="item.path"
-        >
-          <a href="">
+        <router-link tag="li" to="/" class="layui-hide-xs">
+          <a>首页</a>
+        </router-link>
+        <router-link v-for="(item, index) in list" :key="'panel' + index" tag="li" :to="item.path">
+          <a href>
             {{ item.name }}
             <span class="layui-badge-dot" v-if="item.isNew"></span>
           </a>
@@ -24,19 +19,19 @@
         <!-- 用户登入后显示 -->
         <template v-if="isLogin">
           <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
-            <a>我发表的贴</a>
+            <router-link :to="{name: 'mypost'}">我发表的贴</router-link>
           </li>
           <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block">
-            <a>我收藏的贴</a>
+            <router-link :to="{name: 'mycollection'}">我收藏的贴</router-link>
           </li>
         </template>
       </ul>
 
       <div class="fly-column-right layui-hide-xs">
-        <span class="fly-search"><i class="layui-icon"></i></span>
-        <router-link :to="{ 'name': 'add' }" class="layui-btn"
-          >发表新帖</router-link
-        >
+        <span class="fly-search">
+          <i class="layui-icon"></i>
+        </span>
+        <router-link :to="{ 'name': 'add' }" class="layui-btn">发表新帖</router-link>
       </div>
       <div
         class="layui-hide-sm layui-show-xs-block"

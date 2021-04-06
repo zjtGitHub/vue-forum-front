@@ -37,19 +37,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center" >
-            <td class="text-left">a
-              <a>asd</a>
+          <tr v-for="(item,index) in list" :key="index" class="text-center">
+            <td class="text-left">
+              <router-link
+                class="link"
+                :to="{name: 'detail', params: {tid: item._id}}"
+              >{{item.title}}</router-link>
             </td>
-            <td>打开</td>
-            <td class="success">未结</td>
-            <td>666</td>
-            <td>5阅/5答</td>
+            <td>{{item.status === '0' ? '打开': '关闭'}}</td>
+            <td :class="{'success': item.isEnd !=='0'}">{{!item.isEnd ? '未结': '已结贴'}}</td>
+            <td>{{item.created | moment}}</td>
+            <td>{{item.reads}}阅/{{item.answer}}答</td>
             <td>
               <div
                 class="layui-btn layui-btn-xs"
+                :class="{'layui-btn-disabled': item.isEnd === 1}"
+                @click="editPost(item)"
               >编辑</div>
-              <div class="layui-btn layui-btn-xs layui-btn-danger">删除</div>
+              <div class="layui-btn layui-btn-xs layui-btn-danger" @click="deletePost(item)">删除</div>
             </td>
           </tr>
         </tbody>
@@ -62,9 +67,8 @@
         :hasTotal="true"
         :hasSelect="true"
         @changeCurrent="handleChange"
-    ></my-pagination>
+      ></my-pagination>
     </div>
-
   </div>
 </template>
 
@@ -102,7 +106,7 @@ export default {
     },
     deletePost (item) {
       this.$confirm('确定删除吗?', () => {
-        if (item.isEnd !== '0') {
+        if (item.isEnd) {
           this.$pop('帖子已结贴，无法删除！', 'shake')
           return
         }
@@ -110,7 +114,7 @@ export default {
           tid: item._id
         }).then((res) => {
           if (res.code === 200) {
-            this.$pop('', '删除成功！')
+            this.$pop('删除成功！')
             this.list.splice(this.list.indexOf(item), 1)
           } else {
             this.$pop(res.msg, 'shake')
@@ -119,6 +123,16 @@ export default {
       }, () => {
 
       })
+    },
+    editPost (item) {
+      if (item.isEnd) {
+        this.$pop('帖子已经结贴，无法编辑', 'shake')
+      } else {
+        this.$router.push({
+          name: 'edit',
+          params: { tid: item._id, page: item }
+        })
+      }
     },
     handleChange (val) {
       this.current = val
