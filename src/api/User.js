@@ -41,10 +41,18 @@ const getPostPublic = (data) => axios.get('/public/latestPost?' + qs.stringify(d
 
 // 删除指定文章列表
 const deletePostByUid = (data) => axios.get('/user/deletePost?' + qs.stringify(data))
+
 // 获取用户的基本信息
 const getInfo = (data) => axios.get('/public/info?' + qs.stringify(data))
+
 // 获取用户最近评论列表
 const getCommentList = (data) => axios.get('/public/latestComment?' + qs.stringify(data))
+
+// 获取用户未读消息
+const getMsg = (data) => axios.get('/user/getmsg?' + qs.stringify(data))
+
+// 设置用户未读消息
+const setMsg = (data) => axios.get('/user/setmsg?' + qs.stringify(data))
 export {
   signIn,
   updateUserInfo,
@@ -57,5 +65,7 @@ export {
   getPostPublic,
   deletePostByUid,
   getInfo,
-  getCommentList
+  getCommentList,
+  getMsg,
+  setMsg
 }

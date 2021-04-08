@@ -129,6 +129,7 @@ export default {
     getUserInfo () {
       getInfo({ uid: this.userInfo._id }).then((res) => {
         if (res.code === 200) {
+          res.data.lastSign = this.$store.state.userInfo.lastSign
           this.$store.commit('setUserInfo', res.data)
         }
       })
