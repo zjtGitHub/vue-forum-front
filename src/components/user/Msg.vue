@@ -7,9 +7,9 @@
         <ul class="mine-msg">
           <li v-for="(item,index) in lists" :key="'comments' + index">
             <blockquote class="layui-elem-quote">
-              <a href="/jump?username=Absolutely" target="_blank">
+              <router-link :to="{name: 'home',params: {uid: item.cuid._id}}">
                 <cite>{{item.cuid.name}}</cite>
-              </a>回答了您的求解
+              </router-link>回答了您的求解
               <a target="_blank" href="/jie/8153.html/page/0/#item-1489505778669">
                 <cite>{{item.title}}</cite>
               </a>

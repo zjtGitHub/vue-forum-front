@@ -82,6 +82,15 @@
               </dd>
             </dl>
           </li>
+          <div class="fly-nav-msg" v-show="num.message && num.message !== 0">{{num.message}}</div>
+          <transition name="fade">
+            <div class="layui-layer-tips">
+              <div class="layui-layer-content" v-show="hasMsg">
+                您有{{num.message}}条未读消息
+                <i class="layui-layer-TipsG layui-layer-TipsB"></i>
+              </div>
+            </div>
+          </transition>
         </template>
       </ul>
     </div>
@@ -89,22 +98,39 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'Header',
   data () {
     return {
       isHover: false,
+      hasMsg: false,
       hoverCtrl: {}
     }
   },
   computed: {
     ...mapGetters(['uid']),
+    ...mapState({
+      num: (state) => state.num
+    }),
     userInfo () {
       return this.$store.state.userInfo
     },
     isLogin () {
       return this.$store.state.isLogin
+    }
+  },
+  watch: {
+    num (newval, oldval) {
+      if (newval.event && newval !== oldval) {
+        // 判断消息数量
+        if (newval.message && newval.message > 0) {
+          this.hasMsg = true
+          setTimeout(() => {
+            this.hasMsg = false
+          }, 2000)
+        }
+      }
     }
   },
   methods: {
@@ -137,5 +163,12 @@ export default {
 <style scoped>
 .fly-logo img {
   width: 45px;
+}
+.layui-layer-tips {
+  position: absolute;
+  white-space: nowrap;
+  right: 0;
+  top: 60px;
+  z-index: 2000;
 }
 </style>
