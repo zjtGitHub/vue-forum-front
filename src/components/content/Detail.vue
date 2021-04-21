@@ -90,7 +90,8 @@
               >{{page.isFav ? '取消收藏': '收藏'}}</a>
             </div>
             <!-- 帖子详情 -->
-            <div class="detail-body photos" v-richtext="page.content"></div>
+            <div v-if="tid.indexOf('http') > -1" class="detail-body photos" v-html="page"></div>
+            <div v-else class="detail-body photos" v-richtext="page.content"></div>
           </div>
           <!-- ------------------------------------------------------------------------------------- -->
           <!-- 回复列表 -->
@@ -249,6 +250,7 @@ import { addCollect } from '@/api/User'
 import { getDetail } from '@/api/content'
 import { getCommentList, addComment, editComment, setBest, setHands } from '@/api/comments'
 import { scrollToElem } from '@/utils/common'
+import axios from '@/utils/request'
 export default {
   name: 'Detail',
   mixins: [CodeMix],
@@ -451,15 +453,31 @@ export default {
       })
     },
     getDetail () {
-      getDetail(this.tid).then((res) => {
-        if (res.code === 200) {
-          this.page = res.data
+      if (this.tid.indexOf('http') > -1) {
+        axios.get('/test/detail', {
+          params: {
+            url: this.tid
+          }
+        }).then((res) => {
+          this.page = res
+          this.page = this.page.replace(/src/g, 'sb')
+          this.page = this.page.replace(/data-original/g, 'src')
           console.log(this.page)
-        }
-      }).catch((err) => {
-        console.log(err)
+        }).catch((err) => {
+          console.log(err)
         // this.$router.push('/404')
-      })
+        })
+      } else {
+        getDetail(this.tid).then((res) => {
+          if (res.code === 200) {
+            this.page = res.data
+            console.log(this.page)
+          }
+        }).catch((err) => {
+          console.log(err)
+        // this.$router.push('/404')
+        })
+      }
     },
     handleChangeSize (val, current) {
       this.size = val

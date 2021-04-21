@@ -4,21 +4,24 @@ class WebsocketClient {
     const defaultConfig = {
       url: '127.0.0.1',
       port: '3001',
-      protocol: 'ws'
+      protocol: 'ws',
+      timeInterval: 3 * 1000
     }
     const finalConfig = { ...defaultConfig, ...config }
     this.ws = {}
     this.url = finalConfig.url
     this.port = finalConfig.port
     this.protocol = finalConfig.protocol
+    this.handle = null
+    this.timeInterval = finalConfig.timeInterval
   }
 
   init () {
     this.ws = new WebSocket(`${this.protocol}://${this.url}:${this.port}`)
-    this.ws.onopen = this.onOpen
-    this.ws.onmessage = this.onMessage
-    this.ws.onclose = this.onClose
-    this.ws.onerror = this.onError
+    this.ws.onopen = () => this.onOpen()
+    this.ws.onmessage = (msg) => this.onMessage(msg)
+    this.ws.onclose = () => this.onClose()
+    this.ws.onerror = () => this.onError()
   }
 
   onOpen () {
@@ -27,6 +30,7 @@ class WebsocketClient {
       event: 'auth',
       message: 'Bearer ' + store.state.token
     }))
+    // this.checkServer()
   }
 
   send (msg) {
@@ -43,7 +47,7 @@ class WebsocketClient {
         this.$router.push({ name: '404' })
         break
       case 'heartbeat':
-        // this.checkServer() // timeInterval + t
+        this.checkServer() // timeInterval + t
         // 可以注释掉以下心跳状态，主动测试服务端是否会断开客户端的连接
         this.send(JSON.stringify({
           event: 'heartbeat',
@@ -57,20 +61,25 @@ class WebsocketClient {
 
   onClose () {
     // 当链接主动断开的时候触发close事件
-    console.log('close:' + this.ws.readyState)
-    console.log('已关闭websocket')
     this.ws.close()
   }
 
   onError () {
     // 当连接失败时，触发error事件
-    console.log('error:' + this.ws.readyState)
-    console.log('websocket连接失败！')
     // 连接失败之后，1s进行断线重连！
-    var _this = this
-    setTimeout(function () {
-      _this.init()
+    console.log(888888)
+    setTimeout(() => {
+      this.init()
     }, 1000)
+  }
+
+  checkServer () {
+    clearTimeout(this.handle)
+    this.handle = setTimeout(() => {
+      this.onClose()
+      this.onError()
+    // 设置1ms的时延，调试在服务器测未及时响应时，客户端的反应
+    }, this.timeInterval + 1000)
   }
 }
 
