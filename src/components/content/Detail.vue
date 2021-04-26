@@ -90,7 +90,7 @@
               >{{page.isFav ? '取消收藏': '收藏'}}</a>
             </div>
             <!-- 帖子详情 -->
-            <div v-if="tid.indexOf('http') > -1" class="detail-body photos" v-html="page"></div>
+            <div v-if="tid.type" class="detail-body photos" v-html="page"></div>
             <div v-else class="detail-body photos" v-richtext="page.content"></div>
           </div>
           <!-- ------------------------------------------------------------------------------------- -->
@@ -453,21 +453,23 @@ export default {
       })
     },
     getDetail () {
-      if (this.tid.indexOf('http') > -1) {
+      if (this.tid.type) {
+        console.log(888)
         axios.get('/test/detail', {
           params: {
-            url: this.tid
+            id: this.tid.id
           }
         }).then((res) => {
-          this.page = res
-          this.page = this.page.replace(/src/g, 'sb')
-          this.page = this.page.replace(/data-original/g, 'src')
+          this.page = res.data.content
+          // this.page = this.page.replace(/src/g, 'sb')
+          // this.page = this.page.replace(/data-original/g, 'src')
           console.log(this.page)
         }).catch((err) => {
           console.log(err)
         // this.$router.push('/404')
         })
       } else {
+        console.log(999)
         getDetail(this.tid).then((res) => {
           if (res.code === 200) {
             this.page = res.data

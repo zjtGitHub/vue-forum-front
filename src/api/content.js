@@ -25,6 +25,13 @@ const getTop = () => {
 }
 
 /**
+ * 获取头条
+ */
+const getHeadlines = () => {
+  return axios.get('/public/getHeadlines')
+}
+
+/**
  * 获取友情链接
  */
 const getLinks = () => {
@@ -59,5 +66,6 @@ export {
   uploadImg,
   addPost,
   editPost,
-  getDetail
+  getDetail,
+  getHeadlines
 }
