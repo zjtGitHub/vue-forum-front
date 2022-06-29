@@ -247,10 +247,9 @@ import Editor from '../modules/editer/index'
 import Pagination from '../modules/pagination/Page'
 import CodeMix from '@/mixin/code'
 import { addCollect } from '@/api/User'
-import { getDetail } from '@/api/content'
+import { getDetail, getHeadlinesDetail } from '@/api/content'
 import { getCommentList, addComment, editComment, setBest, setHands } from '@/api/comments'
 import { scrollToElem } from '@/utils/common'
-import axios from '@/utils/request'
 export default {
   name: 'Detail',
   mixins: [CodeMix],
@@ -454,12 +453,7 @@ export default {
     },
     getDetail () {
       if (this.tid.type) {
-        console.log(888)
-        axios.get('/test/detail', {
-          params: {
-            id: this.tid.id
-          }
-        }).then((res) => {
+        getHeadlinesDetail(this.tid.id).then((res) => {
           this.page = res.data.content
           // this.page = this.page.replace(/src/g, 'sb')
           // this.page = this.page.replace(/data-original/g, 'src')
