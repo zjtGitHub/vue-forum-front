@@ -90,7 +90,7 @@
               >{{page.isFav ? '取消收藏': '收藏'}}</a>
             </div>
             <!-- 帖子详情 -->
-            <div v-if="tid.type" class="detail-body photos" v-html="page"></div>
+            <div v-if="type === 'news'" class="detail-body photos" v-html="page.content"></div>
             <div v-else class="detail-body photos" v-richtext="page.content"></div>
           </div>
           <!-- ------------------------------------------------------------------------------------- -->
@@ -182,7 +182,7 @@
             ></my-pagination>
 
             <!-- 回复模块 -->
-            <div class="layui-form layui-form-pane">
+            <div class="layui-form layui-form-pane" id="comment">
               <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
                 <form @submit.prevent="handleSubmit(onSubmit)">
                   <my-Editor @changeContent="addContent" :initContent="editInfo.content"></my-Editor>
@@ -281,7 +281,7 @@ export default {
       return this.$store.state.userInfo
     }
   },
-  props: ['tid'],
+  props: ['tid', 'type'],
   mounted () {
     this.getDetail()
     this.getCommentList()
@@ -452,22 +452,20 @@ export default {
       })
     },
     getDetail () {
-      if (this.tid.type) {
-        getHeadlinesDetail(this.tid.id).then((res) => {
-          this.page = res.data.content
+      // 前日头条跳转
+      if (this.type === 'news') {
+        getHeadlinesDetail(this.tid).then((res) => {
+          this.page = res.data
           // this.page = this.page.replace(/src/g, 'sb')
           // this.page = this.page.replace(/data-original/g, 'src')
-          console.log(this.page)
         }).catch((err) => {
           console.log(err)
         // this.$router.push('/404')
         })
       } else {
-        console.log(999)
         getDetail(this.tid).then((res) => {
           if (res.code === 200) {
             this.page = res.data
-            console.log(this.page)
           }
         }).catch((err) => {
           console.log(err)

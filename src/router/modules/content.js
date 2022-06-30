@@ -36,7 +36,7 @@ export default [
     }
   },
   {
-    path: '/detail/:tid',
+    path: '/detail/:type/:tid',
     props: true,
     name: 'detail',
     component: Detail

@@ -9,7 +9,7 @@
         <my-tips></my-tips>
         <my-sign></my-sign>
         <my-hotlist></my-hotlist>
-        <my-ads></my-ads>
+        <!-- <my-ads></my-ads> -->
         <my-links></my-links>
       </div>
     </div>
@@ -18,7 +18,7 @@
 
 <script>
 import Tips from '@/components/sidebar/Tips'
-import Ads from '@/components/sidebar/Ads'
+// import Ads from '@/components/sidebar/Ads'
 import HotList from '@/components/sidebar/HotList'
 import Links from '@/components/sidebar/Links'
 import Sign from '@/components/sidebar/Sign'
@@ -28,7 +28,7 @@ export default {
   name: 'index',
   components: {
     'my-tips': Tips,
-    'my-ads': Ads,
+    // 'my-ads': Ads,
     'my-hotlist': HotList,
     'my-links': Links,
     'my-sign': Sign,

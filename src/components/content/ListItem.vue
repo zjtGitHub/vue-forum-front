@@ -99,7 +99,13 @@ export default {
       this.$emit('nextPage')
     },
     toDetail (item) {
-      this.$router.push(`/detail/${item._id}`)
+      this.$router.push({
+        name: 'detail',
+        params: {
+          tid: item._id,
+          type: 'post'
+        }
+      })
     }
   }
 }
